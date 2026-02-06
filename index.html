@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Nur1.AEP | Sula.Core</title>
+
+<style>
+:root {
+    --accent: #0ea5e9;
+    --bg: linear-gradient(180deg, #ffffff 0%, #f0f9ff 55%, #e0f2fe 100%);
+    --card: rgba(255,255,255,.88);
+    --text: #020617;
+    --radius-xl: 40px;
+    --ease: cubic-bezier(.2,1,.2,1);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    font-family: Inter, -apple-system, sans-serif;
+    background: var(--bg);
+    background-attachment: fixed;
+    color: var(--text);
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* ===== ГОЛУБОЕ ИНТРО ===== */
+.intro {
+    position: fixed;
+    inset: 0;
+    background: var(--accent);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    clip-path: circle(150% at 50% 50%);
+    transition: clip-path 1.2s cubic-bezier(0.8, 0, 0.2, 1);
+}
+
+.intro.hide {
+    clip-path: circle(0% at 50% 50%);
+}
+
+.intro-content { text-align: center; }
+
+.intro-text-wrapper {
+    display: inline-block;
+    position: relative;
+}
+
+.intro h1 {
+    font-size: clamp(26px, 7vw, 42px);
+    font-weight: 900;
+    color: #ffffff;
+    margin: 0;
+    letter-spacing: -1.5px;
+    display: flex;
+    gap: 12px;
+    white-space: nowrap;
+}
+
+.intro span {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(10px);
+    animation: revealLight 0.7s var(--ease) forwards;
+}
+
+.intro span:nth-child(1) { animation-delay: 0.2s; }
+.intro span:nth-child(2) { animation-delay: 0.4s; opacity: 0.7; }
+.intro span:nth-child(3) { animation-delay: 0.6s; }
+
+.loader-bar {
+    width: 0%;
+    height: 4px;
+    background: #ffffff;
+    margin-top: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.4);
+    animation: loadProgress 1.4s ease-in-out forwards;
+    animation-delay: 0.3s;
+}
+
+@keyframes revealLight {
+    to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+@keyframes loadProgress {
+    0% { width: 0%; }
+    100% { width: 100%; }
+}
+
+/* ===== КОНТЕНТ ===== */
+.app {
+    max-width: 520px;
+    margin: auto;
+    padding: 30px 0 110px;
+}
+
+header { padding: 10px 24px 35px; }
+
+.brand-label {
+    font-size: 22px; 
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    color: var(--text);
+}
+
+.brand-label span {
+    color: var(--accent);
+}
+
+.info {
+    margin: 0 20px 40px;
+    padding: 34px;
+    border-radius: var(--radius-xl);
+    background: linear-gradient(135deg,#e0f2fe,#bae6fd);
+    box-shadow: 0 30px 80px rgba(14,165,233,.15);
+    transform: translateY(30px);
+    opacity: 0;
+    transition: 1s var(--ease);
+}
+.info.show { transform: none; opacity: 1; }
+
+.info h1 { font-size: 30px; font-weight: 900; line-height: 1.1; margin: 0 0 14px; }
+.info .lead { font-size: 17px; font-weight: 700; margin-bottom: 18px; }
+.info ul { margin: 0; padding: 0; list-style: none; }
+.info li { margin-bottom: 8px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+
+.section { margin: 40px 24px 18px; font-size: 24px; font-weight: 900; }
+
+.slider {
+    display: flex;
+    gap: 18px;
+    padding: 0 20px 40px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+}
+.slider::-webkit-scrollbar { display: none; }
+
+.card {
+    min-width: 75vw;
+    height: 250px;
+    padding: 30px;
+    border-radius: var(--radius-xl);
+    background: var(--card);
+    backdrop-filter: blur(18px);
+    scroll-snap-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    transition: .6s var(--ease);
+}
+.card.active {
+    transform: scale(1.05);
+    box-shadow: 0 40px 100px rgba(14,165,233,.15);
+    border: 1px solid var(--accent);
+}
+
+.metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    border-top: 1px solid rgba(0,0,0,.08);
+    padding-top: 16px;
+}
+.metrics span { font-size: 18px; font-weight: 900; }
+
+/* ===== 3 ВИДЕО КАРТОЧКИ ===== */
+.v-card {
+    min-width: 80vw;
+    aspect-ratio: 9/16;
+    max-height: 60vh;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    position: relative;
+    background: #000;
+    scroll-snap-align: center;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+}
+.v-card video { width: 100%; height: 100%; object-fit: cover; }
+
+.v-cover {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    background: linear-gradient(225deg, #0ea5e9, #bae6fd);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: 0.5s var(--ease);
+}
+.v-card.playing .v-cover { opacity: 0; pointer-events: none; }
+
+.play-btn {
+    width: 70px; height: 70px;
+    background: rgba(255,255,255,0.3);
+    backdrop-filter: blur(10px);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid #fff;
+    animation: pulse 2s infinite;
+}
+.play-btn::after {
+    content: ''; width: 0; height: 0;
+    border-style: solid;
+    border-width: 10px 0 10px 18px;
+    border-color: transparent transparent transparent #fff;
+    margin-left: 4px;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,255,255,0.4); }
+    70% { transform: scale(1.1); box-shadow: 0 0 0 15px rgba(255,255,255,0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,255,255,0); }
+}
+
+.cta {
+    position: fixed;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 40px);
+    max-width: 480px;
+    z-index: 100;
+}
+.cta a {
+    height: 70px;
+    border-radius: 35px;
+    background: linear-gradient(135deg,#0ea5e9,#38bdf8);
+    color: #fff;
+    font-weight: 900;
+    text-decoration: none;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 20px 40px rgba(14,165,233,0.3);
+}
+
+footer { text-align: center; padding: 40px 0; font-size: 11px; font-weight: 700; opacity: .4; }
+</style>
+</head>
+
+<body>
+
+<div class="intro" id="intro-screen">
+    <div class="intro-content">
+        <div class="intro-text-wrapper">
+            <h1>
+                <span>Nur1.AEP</span>
+                <span>|</span>
+                <span>Sula.Core</span>
+            </h1>
+            <div class="loader-bar"></div>
+        </div>
+    </div>
+</div>
+
+<div class="app">
+    <header>
+        <div class="brand-label">Nur1.AEP <span>|</span> Sula.Core</div>
+    </header>
+
+    <section class="info" id="info-block">
+        <h1>Видеопродакшн<br>полного цикла 🎥</h1>
+        <p class="lead">Ломаем баннерную слепоту. Создаем видео, которые досматривают.</p>
+        <ul>
+            <li>▫️ От хаоса в голове до готового рендера.</li>
+            <li>▫️ 4 года в индустрии.</li>
+            <li><strong>Не просто снимаем, а упаковываем смыслы.</strong></li>
+        </ul>
+    </section>
+
+    <h2 class="section">Наши достижения</h2>
+    <div class="slider" id="stats">
+        <div class="card active">
+            <h3>Результаты охватов</h3>
+            <div class="metrics">
+                <div><span>+340%</span><br>Profit</div>
+                <div><span>1.2M</span><br>Reach</div>
+            </div>
+        </div>
+        <div class="card">
+            <h3>Премиум качество</h3>
+            <div class="metrics">
+                <div><span>Ultra HD</span><br>Level</div>
+                <div><span>100%</span><br>Quality</div>
+            </div>
+        </div>
+        <div class="card">
+            <h3>Скорость работы</h3>
+            <div class="metrics">
+                <div><span>24/7</span><br>Support</div>
+                <div><span>FAST</span><br>Render</div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="section">Портфолио</h2>
+    <div class="slider">
+        <div class="v-card" onclick="playVideo(this)">
+            <div class="v-cover">
+                <div class="play-btn"></div>
+                <span style="color:#fff; font-weight:800; margin-top:15px; font-size:12px; letter-spacing:1px;">SHOWREEL 2026</span>
+            </div>
+            <video src="Vid1_compressed.mp4" playsinline loop></video>
+        </div>
+        <div class="v-card" onclick="playVideo(this)">
+            <div class="v-cover" style="background: linear-gradient(225deg, #38bdf8, #0ea5e9);">
+                <div class="play-btn"></div>
+                <span style="color:#fff; font-weight:800; margin-top:15px; font-size:12px; letter-spacing:1px;">REELS EDIT</span>
+            </div>
+            <video src="Vid1_compressed.mp4" playsinline loop></video>
+        </div>
+        <div class="v-card" onclick="playVideo(this)">
+            <div class="v-cover" style="background: linear-gradient(225deg, #020617, #0ea5e9);">
+                <div class="play-btn"></div>
+                <span style="color:#fff; font-weight:800; margin-top:15px; font-size:12px; letter-spacing:1px;">MOTION ART</span>
+            </div>
+            <video src="Vid1_compressed.mp4" playsinline loop></video>
+        </div>
+    </div>
+
+    <footer>© 2026 Nur1.AEP | Sula.Core</footer>
+</div>
+
+<div class="cta">
+    <a href="https://t.me/nursnzz">ОБСУДИТЬ ПРОЕКТ</a>
+</div>
+
+<script>
+window.addEventListener('load', () => {
+    const intro = document.getElementById('intro-screen');
+    setTimeout(() => {
+        intro.classList.add('hide'); 
+        setTimeout(() => {
+            document.getElementById('info-block').classList.add('show');
+        }, 600);
+    }, 2400);
+});
+
+const statsSlider = document.getElementById('stats');
+statsSlider.addEventListener('scroll', () => {
+    const center = statsSlider.scrollLeft + statsSlider.offsetWidth / 2;
+    [...statsSlider.children].forEach(c => {
+        const cc = c.offsetLeft + c.offsetWidth / 2;
+        c.classList.toggle('active', Math.abs(center - cc) < 120);
+    });
+});
+
+function playVideo(card) {
+    const video = card.querySelector('video');
+    if (video.paused) {
+        document.querySelectorAll('video').forEach(v => { v.pause(); v.parentElement.classList.remove('playing'); });
+        video.play();
+        card.classList.add('playing');
+    } else {
+        video.pause();
+        card.classList.remove('playing');
+    }
+}
+</script>
+
+</body>
+</html>
