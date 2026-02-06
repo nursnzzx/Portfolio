@@ -15,11 +15,11 @@
     --ease: cubic-bezier(.2,1,.2,1);
 }
 
-* { box-sizing: border-box; }
+* { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 
 html, body {
     margin: 0;
-    font-family: Inter, -apple-system, sans-serif;
+    font-family: 'Inter', -apple-system, sans-serif;
     background: var(--bg);
     background-attachment: fixed;
     color: var(--text);
@@ -27,7 +27,7 @@ html, body {
     -webkit-tap-highlight-color: transparent;
 }
 
-/* ===== ГОЛУБОЕ ИНТРО ===== */
+/* ===== ГОЛУБОЕ ИНТРО (АДАПТИВНОЕ) ===== */
 .intro {
     position: fixed;
     inset: 0;
@@ -39,27 +39,28 @@ html, body {
     z-index: 1000;
     clip-path: circle(150% at 50% 50%);
     transition: clip-path 1.2s cubic-bezier(0.8, 0, 0.2, 1);
+    padding: 20px;
 }
 
 .intro.hide {
     clip-path: circle(0% at 50% 50%);
 }
 
-.intro-content { text-align: center; }
-
 .intro-text-wrapper {
     display: inline-block;
     position: relative;
+    max-width: 100%;
 }
 
 .intro h1 {
-    font-size: clamp(26px, 7vw, 42px);
+    font-size: clamp(22px, 6vw, 42px); /* Адаптивный размер букв */
     font-weight: 900;
     color: #ffffff;
     margin: 0;
-    letter-spacing: -1.5px;
+    letter-spacing: -1px;
     display: flex;
-    gap: 12px;
+    justify-content: center;
+    gap: 8px;
     white-space: nowrap;
 }
 
@@ -81,7 +82,7 @@ html, body {
     background: #ffffff;
     margin-top: 15px;
     border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
     animation: loadProgress 1.4s ease-in-out forwards;
     animation-delay: 0.3s;
 }
@@ -99,10 +100,10 @@ html, body {
 .app {
     max-width: 520px;
     margin: auto;
-    padding: 30px 0 110px;
+    padding: env(safe-area-inset-top) 0 120px; /* Учет челки iPhone */
 }
 
-header { padding: 10px 24px 35px; }
+header { padding: 20px 24px 30px; }
 
 .brand-label {
     font-size: 22px; 
@@ -117,72 +118,77 @@ header { padding: 10px 24px 35px; }
 
 .info {
     margin: 0 20px 40px;
-    padding: 34px;
+    padding: 30px;
     border-radius: var(--radius-xl);
     background: linear-gradient(135deg,#e0f2fe,#bae6fd);
-    box-shadow: 0 30px 80px rgba(14,165,233,.15);
+    box-shadow: 0 25px 60px rgba(14,165,233,.12);
     transform: translateY(30px);
     opacity: 0;
     transition: 1s var(--ease);
 }
 .info.show { transform: none; opacity: 1; }
 
-.info h1 { font-size: 30px; font-weight: 900; line-height: 1.1; margin: 0 0 14px; }
-.info .lead { font-size: 17px; font-weight: 700; margin-bottom: 18px; }
+.info h1 { font-size: clamp(24px, 7vw, 30px); font-weight: 900; line-height: 1.1; margin: 0 0 15px; }
+.info .lead { font-size: 16px; font-weight: 700; margin-bottom: 18px; line-height: 1.4; }
 .info ul { margin: 0; padding: 0; list-style: none; }
-.info li { margin-bottom: 8px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+.info li { margin-bottom: 10px; font-size: 15px; font-weight: 500; display: flex; align-items: flex-start; gap: 10px; }
 
-.section { margin: 40px 24px 18px; font-size: 24px; font-weight: 900; }
+.section { margin: 40px 24px 20px; font-size: 22px; font-weight: 900; }
 
 .slider {
     display: flex;
-    gap: 18px;
+    gap: 16px;
     padding: 0 20px 40px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
 }
 .slider::-webkit-scrollbar { display: none; }
 
 .card {
-    min-width: 75vw;
-    height: 250px;
-    padding: 30px;
+    min-width: 80vw;
+    min-height: 220px;
+    padding: 25px;
     border-radius: var(--radius-xl);
     background: var(--card);
-    backdrop-filter: blur(18px);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     scroll-snap-align: center;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    transition: .6s var(--ease);
+    transition: .5s var(--ease);
+    border: 1px solid rgba(0,0,0,0.03);
 }
 .card.active {
-    transform: scale(1.05);
-    box-shadow: 0 40px 100px rgba(14,165,233,.15);
-    border: 1px solid var(--accent);
+    transform: scale(1.02);
+    box-shadow: 0 30px 70px rgba(14,165,233,.1);
+    border-color: var(--accent);
 }
 
 .metrics {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
-    border-top: 1px solid rgba(0,0,0,.08);
-    padding-top: 16px;
+    border-top: 1px solid rgba(0,0,0,.06);
+    padding-top: 15px;
+    margin-top: 15px;
 }
-.metrics span { font-size: 18px; font-weight: 900; }
+.metrics span { font-size: 18px; font-weight: 900; color: var(--accent); }
+.metrics div { font-size: 11px; font-weight: 700; opacity: 0.6; text-transform: uppercase; }
 
-/* ===== 3 ВИДЕО КАРТОЧКИ ===== */
+/* ===== ВИДЕО ===== */
 .v-card {
-    min-width: 80vw;
+    min-width: 82vw;
     aspect-ratio: 9/16;
-    max-height: 60vh;
+    max-height: 65vh;
     border-radius: var(--radius-xl);
     overflow: hidden;
     position: relative;
     background: #000;
     scroll-snap-align: center;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
 }
 .v-card video { width: 100%; height: 100%; object-fit: cover; }
 
@@ -190,18 +196,18 @@ header { padding: 10px 24px 35px; }
     position: absolute;
     inset: 0;
     z-index: 5;
-    background: linear-gradient(225deg, #0ea5e9, #bae6fd);
+    background: linear-gradient(225deg, var(--accent), #bae6fd);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    transition: 0.5s var(--ease);
+    transition: 0.6s var(--ease);
 }
-.v-card.playing .v-cover { opacity: 0; pointer-events: none; }
+.v-card.playing .v-cover { opacity: 0; pointer-events: none; transform: scale(1.1); }
 
 .play-btn {
-    width: 70px; height: 70px;
-    background: rgba(255,255,255,0.3);
+    width: 65px; height: 65px;
+    background: rgba(255,255,255,0.25);
     backdrop-filter: blur(10px);
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
@@ -211,38 +217,38 @@ header { padding: 10px 24px 35px; }
 .play-btn::after {
     content: ''; width: 0; height: 0;
     border-style: solid;
-    border-width: 10px 0 10px 18px;
+    border-width: 10px 0 10px 16px;
     border-color: transparent transparent transparent #fff;
-    margin-left: 4px;
+    margin-left: 5px;
 }
 
 @keyframes pulse {
     0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,255,255,0.4); }
-    70% { transform: scale(1.1); box-shadow: 0 0 0 15px rgba(255,255,255,0); }
+    70% { transform: scale(1.08); box-shadow: 0 0 0 12px rgba(255,255,255,0); }
     100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,255,255,0); }
 }
 
 .cta {
     position: fixed;
-    bottom: 25px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% - 40px);
-    max-width: 480px;
+    bottom: 20px;
+    left: 0; right: 0;
+    padding: 0 20px;
     z-index: 100;
 }
 .cta a {
-    height: 70px;
-    border-radius: 35px;
-    background: linear-gradient(135deg,#0ea5e9,#38bdf8);
+    height: 65px;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #0ea5e9, #38bdf8);
     color: #fff;
     font-weight: 900;
+    font-size: 15px;
     text-decoration: none;
     display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 20px 40px rgba(14,165,233,0.3);
+    box-shadow: 0 15px 35px rgba(14,165,233,0.35);
+    letter-spacing: 0.5px;
 }
 
-footer { text-align: center; padding: 40px 0; font-size: 11px; font-weight: 700; opacity: .4; }
+footer { text-align: center; padding: 40px 0; font-size: 11px; font-weight: 700; opacity: .3; letter-spacing: 1px; }
 </style>
 </head>
 
@@ -279,21 +285,21 @@ footer { text-align: center; padding: 40px 0; font-size: 11px; font-weight: 700;
     <h2 class="section">Наши достижения</h2>
     <div class="slider" id="stats">
         <div class="card active">
-            <h3>Результаты охватов</h3>
+            <h3 style="margin-bottom:5px;">Результаты охватов</h3>
             <div class="metrics">
                 <div><span>+340%</span><br>Profit</div>
                 <div><span>1.2M</span><br>Reach</div>
             </div>
         </div>
         <div class="card">
-            <h3>Премиум качество</h3>
+            <h3 style="margin-bottom:5px;">Премиум качество</h3>
             <div class="metrics">
                 <div><span>Ultra HD</span><br>Level</div>
                 <div><span>100%</span><br>Quality</div>
             </div>
         </div>
         <div class="card">
-            <h3>Скорость работы</h3>
+            <h3 style="margin-bottom:5px;">Скорость работы</h3>
             <div class="metrics">
                 <div><span>24/7</span><br>Support</div>
                 <div><span>FAST</span><br>Render</div>
@@ -306,27 +312,27 @@ footer { text-align: center; padding: 40px 0; font-size: 11px; font-weight: 700;
         <div class="v-card" onclick="playVideo(this)">
             <div class="v-cover">
                 <div class="play-btn"></div>
-                <span style="color:#fff; font-weight:800; margin-top:15px; font-size:12px; letter-spacing:1px;">SHOWREEL 2026</span>
+                <span style="color:#fff; font-weight:800; margin-top:15px; font-size:11px; letter-spacing:1px;">SHOWREEL 2026</span>
             </div>
-            <video src="Vid1_compressed.mp4" playsinline loop></video>
+            <video src="Vid1_compressed.mp4" playsinline loop muted></video>
         </div>
         <div class="v-card" onclick="playVideo(this)">
             <div class="v-cover" style="background: linear-gradient(225deg, #38bdf8, #0ea5e9);">
                 <div class="play-btn"></div>
-                <span style="color:#fff; font-weight:800; margin-top:15px; font-size:12px; letter-spacing:1px;">REELS EDIT</span>
+                <span style="color:#fff; font-weight:800; margin-top:15px; font-size:11px; letter-spacing:1px;">REELS EDIT</span>
             </div>
-            <video src="Vid1_compressed.mp4" playsinline loop></video>
+            <video src="Vid1_compressed.mp4" playsinline loop muted></video>
         </div>
         <div class="v-card" onclick="playVideo(this)">
             <div class="v-cover" style="background: linear-gradient(225deg, #020617, #0ea5e9);">
                 <div class="play-btn"></div>
-                <span style="color:#fff; font-weight:800; margin-top:15px; font-size:12px; letter-spacing:1px;">MOTION ART</span>
+                <span style="color:#fff; font-weight:800; margin-top:15px; font-size:11px; letter-spacing:1px;">MOTION ART</span>
             </div>
-            <video src="Vid1_compressed.mp4" playsinline loop></video>
+            <video src="Vid1_compressed.mp4" playsinline loop muted></video>
         </div>
     </div>
 
-    <footer>© 2026 Nur1.AEP | Sula.Core</footer>
+    <footer>© 2026 NUR1.AEP | SULA.CORE</footer>
 </div>
 
 <div class="cta">
@@ -349,14 +355,17 @@ statsSlider.addEventListener('scroll', () => {
     const center = statsSlider.scrollLeft + statsSlider.offsetWidth / 2;
     [...statsSlider.children].forEach(c => {
         const cc = c.offsetLeft + c.offsetWidth / 2;
-        c.classList.toggle('active', Math.abs(center - cc) < 120);
+        c.classList.toggle('active', Math.abs(center - cc) < 100);
     });
 });
 
 function playVideo(card) {
     const video = card.querySelector('video');
     if (video.paused) {
-        document.querySelectorAll('video').forEach(v => { v.pause(); v.parentElement.classList.remove('playing'); });
+        document.querySelectorAll('video').forEach(v => { 
+            v.pause(); 
+            v.parentElement.classList.remove('playing'); 
+        });
         video.play();
         card.classList.add('playing');
     } else {
