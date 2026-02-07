@@ -10,14 +10,12 @@
 
     <style>
         :root {
-            --bg: #ffffff;
-            --surface: #f0f9ff; 
+            --bg: #f0f9ff; 
+            --surface: rgba(255, 255, 255, 0.7); 
             --accent: #0ea5e9;
-            --accent-glow: rgba(14, 165, 233, 0.2);
+            --accent-glow: rgba(14, 165, 233, 0.3);
             --text: #0f172a;    
-            --text-dim: #64748b;
             --radius: 24px;
-            --radius-xl: 40px;
             --ease: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -26,287 +24,231 @@
         body { 
             background: var(--bg); color: var(--text); 
             font-family: 'Plus Jakarta Sans', sans-serif;
-            overflow: hidden;
+            overflow-x: hidden;
+            background-attachment: fixed;
         }
 
-        video:fullscreen { object-fit: contain; background: #000; }
-
-        /* ===== ИНТРО ===== */
-        .intro {
-            position: fixed; inset: 0; z-index: 10000;
-            background: var(--accent); display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            clip-path: circle(150% at 50% 50%);
-            transition: clip-path 1.2s cubic-bezier(0.8, 0, 0.2, 1);
+        /* Кастомный курсор с фиксом для мобилок */
+        #cursor {
+            width: 20px; height: 20px; background: var(--accent);
+            border-radius: 50%; position: fixed; pointer-events: none;
+            z-index: 10000; transition: transform 0.15s ease-out;
+            box-shadow: 0 0 15px var(--accent); display: none;
+            left: -50px; top: -50px;
         }
-        .intro.hide { clip-path: circle(0% at 50% 50%); pointer-events: none; }
-        .intro h1 { font-family: 'Syncopate'; font-size: clamp(18px, 5vw, 32px); color: #fff; letter-spacing: 4px; display: flex; gap: 10px; }
-        .intro span { display: inline-block; opacity: 0; transform: translateY(20px); animation: reveal 0.7s var(--ease) forwards; }
-        .intro span:nth-child(1) { animation-delay: 0.2s; }
-        .intro span:nth-child(2) { animation-delay: 0.4s; }
-        .intro span:nth-child(3) { animation-delay: 0.6s; }
-        .loader-bar { width: 220px; height: 3px; background: rgba(255,255,255,0.2); margin-top: 30px; border-radius: 10px; overflow: hidden; }
-        .loader-fill { width: 0%; height: 100%; background: #fff; animation: load 2s ease-in-out forwards; }
-        @keyframes reveal { to { opacity: 1; transform: translateY(0); } }
-        @keyframes load { to { width: 100%; } }
+        @media (min-width: 1024px) { #cursor { display: block; } body { cursor: none; } }
 
-        /* ===== НАВИГАЦИЯ ===== */
+        /* Шапка */
+        header { width: 100%; padding: 60px 0 30px; display: flex; flex-direction: column; align-items: center; }
+        .header-logo {
+            font-family: 'Syncopate'; font-size: clamp(0.7rem, 2vw, 0.9rem); font-weight: 700;
+            letter-spacing: 6px; margin-bottom: 30px; text-transform: uppercase;
+        }
+        .header-logo span { color: var(--accent); }
+
         .nav {
-            position: fixed; top: 0; width: 100%; z-index: 1000;
-            padding: 30px 5%; display: flex; justify-content: space-between; align-items: center;
-        }
-        .nav__logo { font-family: 'Syncopate'; font-size: 0.8rem; font-weight: 700; color: var(--accent); }
-        .nav__menu { 
-            display: flex; gap: 5px; background: rgba(255,255,255,0.85); 
-            backdrop-filter: blur(20px); padding: 5px; border-radius: 100px; 
-            border: 1px solid rgba(14, 165, 233, 0.15);
+            display: flex; gap: 5px; background: rgba(255, 255, 255, 0.9);
+            padding: 6px; border-radius: 100px; backdrop-filter: blur(10px);
+            position: sticky; top: 20px; z-index: 9000;
+            border: 1px solid rgba(14, 165, 233, 0.1);
         }
         .nav__link {
-            text-decoration: none; color: var(--text); font-size: 10px; font-weight: 800;
-            padding: 10px 18px; border-radius: 100px; transition: 0.4s; cursor: pointer; opacity: 0.4;
+            text-decoration: none; color: var(--text); font-size: 11px; font-weight: 800;
+            padding: 12px 26px; border-radius: 100px; transition: 0.3s; cursor: pointer;
         }
-        .nav__link.active { opacity: 1; background: var(--accent); color: #fff; }
+        .nav__link.active { background: var(--accent); color: #fff; box-shadow: 0 5px 15px var(--accent-glow); }
 
-        /* ===== КОНТЕНТ ===== */
-        #stage { position: relative; width: 100%; height: 100vh; }
-        .page {
-            position: absolute; inset: 0; padding: 140px 0 120px;
-            opacity: 0; pointer-events: none; transform: translateY(30px);
-            transition: 0.8s var(--ease); overflow-y: auto; scrollbar-width: none;
-        }
-        .page.active { opacity: 1; pointer-events: all; transform: translateY(0); }
-        .page::-webkit-scrollbar { display: none; }
+        /* Контент */
+        main { width: 100%; max-width: 1400px; margin: 0 auto; padding: 20px 8% 100px; }
+        .page { display: none; opacity: 0; transform: translateY(15px); }
+        .page.active { display: block; opacity: 1; transform: translateY(0); transition: 0.5s var(--ease); }
 
-        .container { padding: 0 8%; }
+        /* Hero */
+        .hero-title { font-size: clamp(2.2rem, 8vw, 4.5rem); font-weight: 900; line-height: 1.1; margin-bottom: 30px; letter-spacing: -2px; min-height: 1.2em; }
+        .hero-title span { color: var(--accent); }
+        .hero-desc { border-left: 5px solid var(--accent); padding-left: 25px; margin-bottom: 50px; }
 
-        /* СЛАЙДЕР КАРТОЧЕК (Из старого кода) */
-        .slider {
-            display: flex; gap: 20px; padding: 40px 8%;
-            overflow-x: auto; scroll-snap-type: x mandatory;
-            scrollbar-width: none; -webkit-overflow-scrolling: touch;
-        }
-        .slider::-webkit-scrollbar { display: none; }
-
+        /* Слайдер */
+        .slider { display: flex; gap: 20px; overflow-x: auto; padding: 15px 0; scrollbar-width: none; }
         .stat-card {
-            min-width: 280px; padding: 35px; border-radius: var(--radius-xl);
-            background: var(--surface); scroll-snap-align: center;
-            transition: 0.6s var(--ease); border: 1px solid rgba(14,165,233,0.05);
-            display: flex; flex-direction: column; justify-content: flex-end;
+            min-width: 280px; padding: 35px; background: var(--surface); border-radius: var(--radius);
+            backdrop-filter: blur(10px); border: 1px solid rgba(14, 165, 233, 0.1); transition: 0.4s;
         }
-        .stat-card.active {
-            transform: scale(1.05); background: #fff;
-            box-shadow: 0 30px 60px rgba(14,165,233,0.12);
-            border-color: var(--accent);
-        }
+        .stat-card h3 { font-size: 2.5rem; color: var(--accent); font-weight: 900; margin-bottom: 5px; }
 
-        .metrics {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
-            border-top: 1px solid rgba(0,0,0,0.05); margin-top: 20px; padding-top: 20px;
+        /* Портфолио */
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .card { 
+            width: 100%; aspect-ratio: 16/9; background: #000; border-radius: var(--radius); 
+            overflow: hidden; cursor: pointer; position: relative; transition: 0.4s;
         }
-        .metrics span { font-size: 1.5rem; font-weight: 900; color: var(--accent); display: block; }
-        .metrics div { font-size: 10px; font-weight: 800; opacity: 0.5; text-transform: uppercase; letter-spacing: 1px; }
-
-        /* СЕТКА ПОРТФОЛИО */
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; padding: 0 8%; }
-        .card {
-            width: 100%; aspect-ratio: 16 / 9; background: #000;
-            border-radius: var(--radius); overflow: hidden; position: relative;
-            transition: 0.6s var(--ease); cursor: pointer;
-        }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px var(--accent-glow); }
+        
         .v-cover {
-            position: absolute; inset: 0; z-index: 5; background: linear-gradient(135deg, #0ea5e9, #38bdf8);
-            display: flex; align-items: center; justify-content: center; transition: 0.5s;
+            position: absolute; inset: 0; z-index: 5;
+            background: linear-gradient(135deg, var(--accent), #0284c7);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: 0.4s; color: #fff;
         }
-        .card:hover .v-cover { opacity: 0.8; }
-        .card.playing .v-cover { opacity: 0; pointer-events: none; }
-        .play-icon { width: 50px; height: 50px; border-radius: 50%; border: 2px solid #fff; position: relative; }
-        .play-icon::after { content: ''; position: absolute; top: 50%; left: 55%; transform: translate(-50%, -50%); border-style: solid; border-width: 8px 0 8px 14px; border-color: transparent transparent transparent #fff; }
-        .card video { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: 0.5s; }
-
-        /* КОНТАКТЫ */
-        .social-link {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 25px; background: var(--surface); border-radius: var(--radius);
-            text-decoration: none; color: var(--text); border: 1px solid rgba(14,165,233,0.1);
-            transition: 0.4s var(--ease); margin-bottom: 12px;
+        .play-btn {
+            width: 50px; height: 50px; border-radius: 50%; border: 2px solid #fff;
+            display: flex; align-items: center; justify-content: center; margin-bottom: 10px;
         }
-        .social-link:hover { background: #fff; border-color: var(--accent); transform: translateX(10px); }
+        .play-btn::after { content: ''; border-style: solid; border-width: 8px 0 8px 14px; border-color: transparent transparent transparent #fff; margin-left: 4px; }
+        .card:hover .v-cover { opacity: 0; visibility: hidden; }
+        .card video { width: 100%; height: 100%; object-fit: cover; }
 
-        #cursor { position: fixed; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; pointer-events: none; z-index: 10001; transition: transform 0.1s; }
+        /* Контакты */
+        .contact-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .contact-btn {
+            padding: 25px; border-radius: var(--radius); background: var(--surface);
+            text-decoration: none; color: var(--text); font-weight: 800;
+            display: flex; flex-direction: column; border: 1px solid rgba(14, 165, 233, 0.1); transition: 0.3s;
+        }
+        .contact-btn:hover { border-color: var(--accent); background: #fff; transform: scale(1.02); }
+        .contact-label { font-size: 0.7rem; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; }
 
-        @media (max-width: 1000px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 700px) { .grid { grid-template-columns: 1fr; } .stat-card { min-width: 75vw; } }
+        @media (max-width: 1024px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 650px) { .grid, .contact-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
 <div id="cursor"></div>
 
-<div class="intro" id="intro-screen">
-    <h1><span>Nur1.AEP</span><span>|</span><span>Sula.Core</span></h1>
-    <div class="loader-bar"><div class="loader-fill"></div></div>
-</div>
-
-<nav class="nav">
-    <div class="nav__logo">NUR1.AEP | SULA.CORE</div>
-    <div class="nav__menu">
+<header>
+    <div class="header-logo">NUR1.AEP <span>|</span> SULA.CORE</div>
+    <nav class="nav">
         <div class="nav__link active" data-target="home">HOME</div>
         <div class="nav__link" data-target="portfolio">PORTFOLIO</div>
         <div class="nav__link" data-target="about">ABOUT</div>
         <div class="nav__link" data-target="contact">CONTACT</div>
-    </div>
-</nav>
+    </nav>
+</header>
 
-<main id="stage">
-    
+<main>
     <section class="page active" id="home">
-        <div class="container">
-            <p style="color: var(--accent); font-weight: 800; letter-spacing: 4px; margin-bottom: 15px; font-size: 0.8rem;">PRODUCTION BY NUR1.AEP</p>
-            <h1 style="font-size: clamp(2.2rem, 7vw, 4.5rem); font-weight: 900; line-height: 1.1; margin-bottom: 30px;">Видеопродакшн<br>полного цикла 🎥</h1>
-            
-            <div style="border-left: 4px solid var(--accent); padding-left: 30px; margin-bottom: 40px;">
-                <p style="font-size: clamp(1.1rem, 2.5vw, 1.6rem); font-weight: 700; margin-bottom: 20px;">Ломаем баннерную слепоту. Создаем видео, которые досматривают.</p>
-                <ul style="list-style: none; font-size: 1.1rem; font-weight: 600; color: var(--text-dim); line-height: 2;">
-                    <li>▫️ От хаоса в голове до готового рендера.</li>
-                    <li>▫️ 4 года в индустрии.</li>
-                </ul>
-                <p style="margin-top: 25px; font-weight: 800;">Не просто снимаем, а <span style="color: var(--accent)">упаковываем смыслы.</span></p>
-            </div>
+        <h1 class="hero-title" id="type-title">Масштабируем Бренды Через Видео 🎥</h1>
+        <div class="hero-desc">
+            <p style="font-size: 1.4rem; font-weight: 700; margin-bottom: 15px;">Создаю визуальные стратегии, которые захватывают внимание.</p>
+            <p style="color: #64748b; font-weight: 600;">▫️ 4 года опыта | ▫️ Премиум монтаж | ▫️ Смыслы важнее графики</p>
         </div>
-
-        <div class="slider" id="achievement-slider">
-            <div class="stat-card active">
-                <h3 style="font-weight: 900;">Результаты охватов</h3>
-                <div class="metrics">
-                    <div><span>+340%</span>Profit</div>
-                    <div><span>1.2M</span>Reach</div>
-                </div>
-            </div>
-            <div class="stat-card">
-                <h3 style="font-weight: 900;">Премиум качество</h3>
-                <div class="metrics">
-                    <div><span>Ultra HD</span>Level</div>
-                    <div><span>100%</span>Quality</div>
-                </div>
-            </div>
-            <div class="stat-card">
-                <h3 style="font-weight: 900;">Скорость работы</h3>
-                <div class="metrics">
-                    <div><span>24/7</span>Support</div>
-                    <div><span>FAST</span>Render</div>
-                </div>
-            </div>
+        <div class="slider">
+            <div class="stat-card"><h3>+340%</h3><p>ПРОФИТ КЛИЕНТОВ</p></div>
+            <div class="stat-card"><h3>1.2M+</h3><p>ПРОСМОТРОВ REELS</p></div>
+            <div class="stat-card"><h3>24/7</h3><p>КРЕАТИВНЫЙ ЦИКЛ</p></div>
         </div>
     </section>
 
     <section class="page" id="portfolio">
-        <div class="container"><h2 style="font-family: 'Syncopate'; margin-bottom: 30px; font-size: 0.8rem; color: var(--accent);">SELECTED WORKS</h2></div>
         <div class="grid">
-            <div class="card" onclick="playFullVideo(this)"><div class="v-cover"><div class="play-icon"></div></div><video src="Vid3.mp4" loop muted playsinline></video></div>
-            <div class="card" onclick="playFullVideo(this)"><div class="v-cover"><div class="play-icon"></div></div><video src="Vid2.mp4" loop muted playsinline></video></div>
-            <div class="card" onclick="playFullVideo(this)"><div class="v-cover"><div class="play-icon"></div></div><video src="Vid3.mp4" loop muted playsinline></video></div>
-            <div class="card" onclick="playFullVideo(this)"><div class="v-cover"><div class="play-icon"></div></div><video src="Vid1.mp4" loop muted playsinline></video></div>
-            <div class="card" onclick="playFullVideo(this)"><div class="v-cover"><div class="play-icon"></div></div><video src="Vid2.mp4" loop muted playsinline></video></div>
-            <div class="card" onclick="playFullVideo(this)"><div class="v-cover"><div class="play-icon"></div></div><video src="Vid3.mp4" loop muted playsinline></video></div>
+            <div class="card" onclick="openVid('vid1.mp4')"><div class="v-cover"><div class="play-btn"></div><p>WATCH</p></div><video src="vid1.mp4" muted loop playsinline></video></div>
+            <div class="card" onclick="openVid('vid2.mp4')"><div class="v-cover"><div class="play-btn"></div><p>WATCH</p></div><video src="vid2.mp4" muted loop playsinline></video></div>
+            <div class="card" onclick="openVid('vid3.mp4')"><div class="v-cover"><div class="play-btn"></div><p>WATCH</p></div><video src="vid3.mp4" muted loop playsinline></video></div>
+            <div class="card" onclick="openVid('vid1.mp4')"><div class="v-cover"><div class="play-btn"></div><p>WATCH</p></div><video src="vid1.mp4" muted loop playsinline></video></div>
+            <div class="card" onclick="openVid('vid2.mp4')"><div class="v-cover"><div class="play-btn"></div><p>WATCH</p></div><video src="vid2.mp4" muted loop playsinline></video></div>
+            <div class="card" onclick="openVid('vid3.mp4')"><div class="v-cover"><div class="play-btn"></div><p>WATCH</p></div><video src="vid3.mp4" muted loop playsinline></video></div>
         </div>
     </section>
 
     <section class="page" id="about">
-        <div class="container">
-            <h2 style="font-family: 'Syncopate'; font-size: 2.5rem; margin-bottom: 30px;">STRATEGY</h2>
-            <p style="font-size: 1.5rem; font-weight: 600;">В СММ картинка без смысла — это мусор. Я создаю контент, который цепляет внимание в первые 2 секунды.</p>
-        </div>
+        <h2 style="font-family: 'Syncopate'; margin-bottom: 25px; color: var(--accent);">PHILOSOPHY</h2>
+        <p style="font-size: 1.8rem; font-weight: 800; line-height: 1.3;">Картинка без смысла — это шум. Я создаю контент, который заставляет остановиться и досмотреть.</p>
     </section>
 
     <section class="page" id="contact">
-        <div class="container">
-            <div class="social-link" onclick="window.open('https://t.me/nursnzz')"><span>TELEGRAM</span><span>@NURSNZZ ↗</span></div>
-            <div class="social-link" onclick="window.open('https://instagram.com/nur1.aep')"><span>INSTAGRAM</span><span>FOLLOW ↗</span></div>
+        <div class="contact-grid">
+            <a href="https://t.me/nursnzz" target="_blank" class="contact-btn"><span class="contact-label">Telegram</span><span>@nursnzz ↗</span></a>
+            <a href="https://instagram.com/nur1.aep" target="_blank" class="contact-btn"><span class="contact-label">Instagram</span><span>@nur1.aep ↗</span></a>
+            <a href="https://github.com/" target="_blank" class="contact-btn"><span class="contact-label">GitHub</span><span>Projects ↗</span></a>
+            <a href="mailto:info@example.com" class="contact-btn"><span class="contact-label">Gmail</span><span>Work Inquiry ↗</span></a>
         </div>
     </section>
-
 </main>
 
 <script>
-    class SmmEngine {
-        constructor() {
-            this.pages = document.querySelectorAll('.page');
-            this.links = document.querySelectorAll('.nav__link');
-            this.cursor = document.getElementById('cursor');
-            this.loader = document.getElementById('intro-screen');
-            this.slider = document.getElementById('achievement-slider');
-            this.init();
-        }
+    document.addEventListener('DOMContentLoaded', () => {
+        const links = document.querySelectorAll('.nav__link');
+        const pages = document.querySelectorAll('.page');
+        const cursor = document.getElementById('cursor');
 
-        init() {
-            window.addEventListener('load', () => {
-                setTimeout(() => { this.loader.classList.add('hide'); }, 2200);
-            });
-            this.setupRouter();
-            this.setupCursor();
-            this.setupSlider();
-            this.setupVideoObserver();
-        }
+        // 1. Фикс Курсора: не дергается при входе в окно
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+        });
 
-        setupRouter() {
-            this.links.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    const target = e.currentTarget.getAttribute('data-target');
-                    this.links.forEach(l => l.classList.remove('active'));
-                    e.currentTarget.classList.add('active');
-                    this.pages.forEach(p => {
-                        p.classList.remove('active');
-                        if(p.id === target) p.classList.add('active');
-                    });
-                });
-            });
-        }
+        // 2. Навигация без багов
+        links.forEach(link => {
+            link.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('data-target');
+                
+                links.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
 
-        setupSlider() {
-            this.slider.addEventListener('scroll', () => {
-                const center = this.slider.scrollLeft + this.slider.offsetWidth / 2;
-                [...this.slider.children].forEach(card => {
-                    const cardCenter = card.offsetLeft + card.offsetWidth / 2;
-                    card.classList.toggle('active', Math.abs(center - cardCenter) < 150);
-                });
-            });
-        }
-
-        setupCursor() {
-            window.addEventListener('mousemove', (e) => {
-                this.cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
-            });
-        }
-
-        setupVideoObserver() {
-            const obs = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    const v = entry.target.querySelector('video');
-                    if (v) {
-                        if (entry.isIntersecting) v.play().catch(() => {});
-                        else v.pause();
+                pages.forEach(p => {
+                    p.classList.remove('active');
+                    if(p.id === targetId) {
+                        p.classList.add('active');
                     }
                 });
-            }, { threshold: 0.1 });
-            document.querySelectorAll('.card').forEach(c => obs.observe(c));
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            });
+        });
+
+        // 3. Магнитный эффект (улучшенный)
+        links.forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = (e.clientX - rect.left - rect.width/2) * 0.4;
+                const y = (e.clientY - rect.top - rect.height/2) * 0.4;
+                btn.style.transform = `translate(${x}px, ${y}px)`;
+            });
+            btn.addEventListener('mouseleave', () => btn.style.transform = 'translate(0,0)');
+        });
+
+        // 4. Фикс Typewriter (работает с HTML)
+        const titleEl = document.getElementById('type-title');
+        const text = titleEl.innerHTML;
+        titleEl.innerHTML = '';
+        let i = 0;
+        function type() {
+            if(i < text.length) {
+                if(text.charAt(i) === '<') { // Пропускаем теги типа <span>
+                    let tagEnd = text.indexOf('>', i);
+                    titleEl.innerHTML += text.substring(i, tagEnd + 1);
+                    i = tagEnd + 1;
+                } else {
+                    titleEl.innerHTML += text.charAt(i);
+                    i++;
+                }
+                setTimeout(type, 40);
+            }
         }
-    }
+        setTimeout(type, 600);
 
-    function playFullVideo(card) {
-        const video = card.querySelector('video');
-        video.muted = false;
-        if (video.requestFullscreen) video.requestFullscreen();
-        else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
-        video.play();
-        card.classList.add('playing');
-        
-        const exit = () => { if (!document.fullscreenElement && !document.webkitIsFullScreen) { video.muted = true; card.classList.remove('playing'); } };
-        document.addEventListener('fullscreenchange', exit);
-        document.addEventListener('webkitfullscreenchange', exit);
-    }
+        // 5. Авто-плей видео при наведении (с фиксом блокировки)
+        document.querySelectorAll('.card').forEach(card => {
+            const v = card.querySelector('video');
+            card.addEventListener('mouseenter', () => {
+                const playPromise = v.play();
+                if (playPromise !== undefined) playPromise.catch(() => {});
+            });
+            card.addEventListener('mouseleave', () => {
+                v.pause();
+                v.currentTime = 0;
+            });
+        });
+    });
 
-    new SmmEngine();
+    // Плеер
+    function openVid(src) {
+        const v = document.createElement('video');
+        v.src = src; v.autoplay = true; v.controls = true;
+        v.style.position = 'fixed'; v.style.zIndex = '10000';
+        if (v.requestFullscreen) v.requestFullscreen();
+        else if (v.webkitRequestFullscreen) v.webkitRequestFullscreen();
+        v.play().catch(() => alert("Ошибка воспроизведения. Проверьте путь к файлу."));
+    }
 </script>
 </body>
-    </html>
-    
+</html>
