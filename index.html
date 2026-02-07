@@ -30,6 +30,7 @@
             overflow-x: hidden;
             background-image: radial-gradient(circle at 0% 0%, rgba(14, 165, 233, 0.05) 0%, transparent 40%),
                               radial-gradient(circle at 100% 100%, rgba(14, 165, 233, 0.05) 0%, transparent 40%);
+            transition: background 0.5s ease;
         }
 
         /* --- Custom Cursor --- */
@@ -37,8 +38,12 @@
         #cursor-aura { width: 44px; height: 44px; border: 1.5px solid var(--accent); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transition: transform 0.15s ease-out; box-shadow: 0 0 15px var(--accent-glow); display: none; }
         @media (pointer: fine) { #cursor-dot, #cursor-aura { display: block; } }
 
-        /* --- Header Section --- */
-        header { width: 100%; padding: 60px 0 30px; display: flex; flex-direction: column; align-items: center; }
+        /* --- UI Components --- */
+        header { 
+            width: 100%; padding: 60px 0 30px; display: flex; flex-direction: column; 
+            align-items: center; transition: opacity 0.5s var(--ease), transform 0.5s var(--ease); 
+        }
+        
         .logo-box { font-family: 'Syncopate'; font-size: 14px; letter-spacing: 10px; color: var(--text); margin-bottom: 45px; }
         .logo-box span { color: var(--accent); text-shadow: 0 0 10px var(--accent-glow); }
 
@@ -54,13 +59,13 @@
         }
         .nav-item.active { background: var(--accent); color: #fff; box-shadow: 0 8px 20px var(--accent-glow); }
 
-        /* --- Layout --- */
-        main { width: 100%; max-width: 1300px; margin: 0 auto; padding: 40px 7% 120px; }
+        /* --- Sections Layout --- */
+        main { width: 100%; max-width: 1300px; margin: 0 auto; padding: 40px 7% 120px; transition: opacity 0.5s var(--ease); }
         .section { display: none; opacity: 0; transform: translateY(50px); }
         .section.active { display: block; animation: sectionReveal 1s var(--ease) forwards; }
         @keyframes sectionReveal { to { opacity: 1; transform: translateY(0); } }
 
-        /* --- Home --- */
+        /* --- Hero Content --- */
         .hero-title { font-size: clamp(2.2rem, 8vw, 5.2rem); font-weight: 900; line-height: 1; letter-spacing: -3px; margin-bottom: 35px; }
         .hero-title span { color: var(--accent); text-shadow: 0 0 30px var(--accent-glow); }
         .hero-description { border-left: 8px solid var(--accent); padding-left: 35px; margin-bottom: 60px; }
@@ -89,30 +94,27 @@
         .video-card:hover video { opacity: 1; }
         .card-label { position: absolute; bottom: 25px; left: 25px; z-index: 10; font-family: 'Syncopate'; font-size: 9px; color: #fff; letter-spacing: 2px; }
 
-        /* --- Fullscreen Modal (Desktop) --- */
+        /* --- Fullscreen Modal Fix --- */
         #video-modal {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 100000;
-            display: none; align-items: center; justify-content: center; backdrop-filter: blur(20px);
+            position: fixed; inset: 0; background: #000; z-index: 99999;
+            display: none; align-items: center; justify-content: center;
         }
-        #video-modal video { width: 95%; max-width: 1150px; border-radius: 24px; box-shadow: 0 0 80px rgba(14, 165, 233, 0.4); }
-        .close-modal { position: absolute; top: 40px; right: 40px; color: #fff; font-size: 50px; cursor: pointer; transition: 0.4s var(--ease); z-index: 100001; }
+        #video-modal video { width: 100%; max-height: 100vh; }
+        .close-modal { position: absolute; top: 40px; right: 40px; color: #fff; font-size: 50px; cursor: pointer; z-index: 100000; }
 
-        /* --- Contact --- */
+        /* --- Contacts --- */
         .contact-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; }
         .contact-link {
             padding: 50px; background: var(--surface); border-radius: var(--radius-lg);
             border: 1px solid rgba(14, 165, 233, 0.1); text-decoration: none; color: var(--text);
-            transition: 0.5s var(--ease); position: relative; overflow: hidden;
+            transition: 0.5s var(--ease);
         }
-        .contact-link:hover { border-color: var(--accent); background: #fff; transform: translateY(-10px); box-shadow: 0 25px 50px var(--accent-glow); }
+        .contact-link:hover { border-color: var(--accent); transform: translateY(-10px); box-shadow: 0 25px 50px var(--accent-glow); }
         .contact-link span { font-size: 12px; color: var(--accent); font-weight: 800; letter-spacing: 3px; display: block; margin-bottom: 15px; }
         .contact-link h4 { font-size: 2rem; font-weight: 800; }
 
         @media (max-width: 1024px) { .portfolio-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 768px) { 
-            .portfolio-grid, .contact-grid { grid-template-columns: 1fr; } 
-            .hero-title { font-size: 2.6rem; }
-        }
+        @media (max-width: 768px) { .portfolio-grid, .contact-grid { grid-template-columns: 1fr; } .hero-title { font-size: 2.6rem; } }
     </style>
 </head>
 <body>
@@ -125,7 +127,7 @@
         <video id="modal-player" controls playsinline></video>
     </div>
 
-    <header>
+    <header id="header-ui">
         <div class="logo-box">NUR1.AEP <span>|</span> SULA.CORE</div>
         <nav class="nav-wrap">
             <button class="nav-item active" data-page="home">Home</button>
@@ -135,7 +137,7 @@
         </nav>
     </header>
 
-    <main>
+    <main id="main-ui">
         <section id="home" class="section active">
             <h1 class="hero-title">Видеопродакшн<br><span>полного цикла 🎥</span></h1>
             <div class="hero-description">
@@ -163,25 +165,13 @@
                     <video loop muted playsinline autoplay><source src="Vid3.mp4" type="video/mp4"></video>
                     <div class="card-label">// STORYTELLING</div>
                 </div>
-                <div class="video-card" onclick="site.openVideo('Vid1.mp4')">
-                    <video loop muted playsinline autoplay><source src="Vid1.mp4" type="video/mp4"></video>
-                    <div class="card-label">// MOTION</div>
-                </div>
-                <div class="video-card" onclick="site.openVideo('Vid2.mp4')">
-                    <video loop muted playsinline autoplay><source src="Vid2.mp4" type="video/mp4"></video>
-                    <div class="card-label">// BRANDING</div>
-                </div>
-                <div class="video-card" onclick="site.openVideo('Vid3.mp4')">
-                    <video loop muted playsinline autoplay><source src="Vid3.mp4" type="video/mp4"></video>
-                    <div class="card-label">// REELS</div>
-                </div>
             </div>
         </section>
 
         <section id="about" class="section">
-            <div style="max-width: 800px; border-left: 8px solid var(--accent); padding-left: 40px;">
-                <h2 style="font-size: 2.5rem; font-weight: 800;">Я соединяю эстетику кино с алгоритмами социальных сетей.</h2>
-                <p style="margin-top: 30px; font-size: 1.2rem; color: var(--text-dim);">Моя задача — сделать так, чтобы ваш зритель перестал скроллить.</p>
+            <div style="border-left: 8px solid var(--accent); padding-left: 40px;">
+                <h2 style="font-size: 2.5rem; font-weight: 800;">Я соединяю эстетику кино с алгоритмами сетей.</h2>
+                <p style="margin-top: 30px; font-size: 1.2rem; color: var(--text-dim);">Картинка без смысла — это просто шум. Мы делаем результат.</p>
             </div>
         </section>
 
@@ -189,117 +179,113 @@
             <div class="contact-grid">
                 <a href="https://t.me/nursnzz" class="contact-link"><span>TELEGRAM</span><h4>@nursnzz ↗</h4></a>
                 <a href="https://instagram.com/nur1.aep" class="contact-link"><span>INSTAGRAM</span><h4>@nur1.aep ↗</h4></a>
-                <a href="https://github.com/nur1aep" class="contact-link"><span>GITHUB</span><h4>Source Code ↗</h4></a>
-                <a href="mailto:nur1aep@gmail.com" class="contact-link"><span>GMAIL</span><h4>Email Me ↗</h4></a>
             </div>
         </section>
     </main>
 
 <script>
-class ProductionSite {
+class ProductionCore {
     constructor() {
-        this.dot = document.getElementById('cursor-dot');
-        this.aura = document.getElementById('cursor-aura');
-        this.modal = document.getElementById('video-modal');
-        this.player = document.getElementById('modal-player');
-        this.btns = document.querySelectorAll('.nav-item');
-        this.sections = document.querySelectorAll('.section');
+        this.ui = { 
+            header: document.getElementById('header-ui'),
+            main: document.getElementById('main-ui'),
+            modal: document.getElementById('video-modal'),
+            player: document.getElementById('modal-player'),
+            dot: document.getElementById('cursor-dot'),
+            aura: document.getElementById('cursor-aura')
+        };
         this.mx = 0; this.my = 0; this.ax = 0; this.ay = 0;
         this.init();
     }
 
     init() {
-        this.setupCursor();
         this.setupNavigation();
-        this.setupModalListeners();
+        this.setupCursor();
         this.setupMagnetic();
+        this.setupFullscreenWatch();
         
-        // Слушатель выхода из фуллскрина (для мобилок)
-        document.addEventListener('fullscreenchange', () => this.onFullscreenExit());
-        document.addEventListener('webkitfullscreenchange', () => this.onFullscreenExit());
+        document.querySelector('.close-modal').onclick = () => this.closeVideo();
     }
 
     setupCursor() {
-        if (!this.dot) return;
-        window.addEventListener('mousemove', (e) => {
-            this.mx = e.clientX; this.my = e.clientY;
-            this.dot.style.left = `${this.mx}px`; this.dot.style.top = `${this.my}px`;
-        });
+        window.onmousemove = e => { 
+            this.mx = e.clientX; this.my = e.clientY; 
+            this.ui.dot.style.left = this.mx + 'px'; 
+            this.ui.dot.style.top = this.my + 'px'; 
+        };
         const tick = () => {
-            this.ax += (this.mx - this.ax) * 0.15; this.ay += (this.my - this.ay) * 0.15;
-            this.aura.style.left = `${this.ax - 22}px`; this.aura.style.top = `${this.ay - 22}px`;
+            this.ax += (this.mx - this.ax) * 0.15; 
+            this.ay += (this.my - this.ay) * 0.15;
+            this.ui.aura.style.left = (this.ax - 22) + 'px';
+            this.ui.aura.style.top = (this.ay - 22) + 'px';
             requestAnimationFrame(tick);
         };
         tick();
     }
 
     setupNavigation() {
-        this.btns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                this.btns.forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                this.sections.forEach(s => {
+                document.querySelectorAll('.section').forEach(s => {
                     s.classList.remove('active');
-                    if (s.id === btn.dataset.page) s.classList.add('active');
+                    if(s.id === btn.dataset.page) s.classList.add('active');
                 });
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            };
         });
     }
 
     openVideo(src) {
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        this.player.src = src;
-        this.player.load();
+        this.ui.player.src = src;
+        this.ui.player.load();
+        
+        // Скрываем интерфейс, чтобы не было наслоений
+        this.ui.header.style.opacity = '0';
+        this.ui.main.style.opacity = '0';
+        this.ui.modal.style.display = 'flex';
 
-        if (isMobile) {
-            // На мобилках НЕ открываем модалку, только системный плеер
-            if (this.player.requestFullscreen) {
-                this.player.requestFullscreen();
-            } else if (this.player.webkitEnterFullscreen) {
-                this.player.webkitEnterFullscreen();
+        if (this.ui.player.webkitEnterFullscreen) {
+            this.ui.player.webkitEnterFullscreen();
+        } else if (this.ui.player.requestFullscreen) {
+            this.ui.player.requestFullscreen();
+        }
+        this.ui.player.play();
+    }
+
+    closeVideo() {
+        this.ui.player.pause();
+        this.ui.player.src = "";
+        this.ui.modal.style.display = 'none';
+        this.ui.header.style.opacity = '1';
+        this.ui.main.style.opacity = '1';
+    }
+
+    setupFullscreenWatch() {
+        const reset = () => {
+            if (!document.webkitIsFullScreen && !document.fullscreenElement) {
+                this.closeVideo();
             }
-            this.player.play();
-        } else {
-            // На ПК открываем красивую модалку
-            this.modal.style.display = 'flex';
-            this.player.play();
-        }
-    }
-
-    onFullscreenExit() {
-        // Если вышли из полноэкранного режима, сбрасываем плеер
-        if (!document.fullscreenElement && !document.webkitIsFullScreen) {
-            this.player.pause();
-            this.player.src = "";
-        }
-    }
-
-    setupModalListeners() {
-        const closeBtn = document.querySelector('.close-modal');
-        const hide = () => {
-            this.modal.style.display = 'none';
-            this.player.pause();
-            this.player.src = "";
         };
-        closeBtn.onclick = hide;
-        this.modal.onclick = (e) => { if (e.target === this.modal) hide(); };
-        window.onkeydown = (e) => { if (e.key === "Escape") hide(); };
+        document.addEventListener('webkitfullscreenchange', reset);
+        document.addEventListener('fullscreenchange', reset);
     }
 
     setupMagnetic() {
         document.querySelectorAll('.nav-item, .contact-link, .stat-card').forEach(el => {
-            el.addEventListener('mousemove', e => {
+            el.onmousemove = e => {
                 const r = el.getBoundingClientRect();
                 const x = (e.clientX - r.left - r.width/2) * 0.3;
                 const y = (e.clientY - r.top - r.height/2) * 0.3;
                 el.style.transform = `translate(${x}px, ${y}px)`;
-            });
-            el.addEventListener('mouseleave', () => el.style.transform = 'translate(0,0)');
+            };
+            el.onmouseleave = () => el.style.transform = 'translate(0,0)';
         });
     }
 }
-const site = new ProductionSite();
+
+const site = new ProductionCore();
 </script>
 </body>
 </html>
