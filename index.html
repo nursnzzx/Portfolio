@@ -28,6 +28,10 @@
             overflow: hidden;
         }
 
+        /* Настройка для видео во весь экран */
+        video:fullscreen { object-fit: contain; background: #000; }
+        video::-webkit-media-controls-panel { background-image: linear-gradient(transparent, rgba(0,0,0,0.5)) !important; }
+
         /* ===== ИНТРО ===== */
         .intro {
             position: fixed; inset: 0; z-index: 10000;
@@ -80,15 +84,45 @@
         .page.active { opacity: 1; pointer-events: all; transform: translateY(0); }
         .page::-webkit-scrollbar { display: none; }
 
-        /* Сетка видео */
+        /* Сетка видео YouTube Style */
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
+        
         .card {
-            width: 100%; aspect-ratio: 16 / 9; background: var(--surface);
+            width: 100%; aspect-ratio: 16 / 9; background: #000;
             border-radius: var(--radius); overflow: hidden; position: relative;
             border: 1px solid rgba(14, 165, 233, 0.1); transition: 0.6s var(--ease);
             cursor: pointer;
         }
-        .card video { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: 1s; }
+
+        .card video { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.5s; }
+        .card.ready video { opacity: 0.8; }
+
+        /* Голубая обложка-градиент */
+        .v-cover {
+            position: absolute; inset: 0; z-index: 5;
+            background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: 0.5s var(--ease);
+        }
+        .card:hover .v-cover { opacity: 0.9; }
+        .card.playing .v-cover { opacity: 0; pointer-events: none; }
+
+        /* Кнопка Play */
+        .play-icon {
+            width: 50px; height: 50px; background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px); border-radius: 50%; border: 2px solid #fff;
+            display: flex; align-items: center; justify-content: center;
+            transition: 0.4s var(--ease);
+        }
+        .play-icon::after {
+            content: ''; width: 0; height: 0;
+            border-style: solid; border-width: 8px 0 8px 14px;
+            border-color: transparent transparent transparent #fff;
+            margin-left: 4px;
+        }
+        .card:hover .play-icon { transform: scale(1.1); background: #fff; }
+        .card:hover .play-icon::after { border-color: transparent transparent transparent var(--accent); }
+
         .card:hover { border-color: var(--accent); transform: translateY(-8px); box-shadow: 0 20px 40px var(--accent-glow); }
         .card:hover video { opacity: 1; transform: scale(1.05); }
 
@@ -132,21 +166,17 @@
     <section class="page active" id="home">
         <div style="max-width: 900px;">
             <p style="color: var(--accent); font-weight: 800; letter-spacing: 4px; margin-bottom: 15px; font-size: 0.8rem;">PRODUCTION BY NUR1.AEP</p>
-            
             <h1 style="font-size: clamp(2.2rem, 7vw, 4.5rem); font-weight: 900; line-height: 1.1; margin-bottom: 30px;">
                 Видеопродакшн<br>полного цикла 🎥
             </h1>
-
             <div style="border-left: 4px solid var(--accent); padding-left: 30px; margin-bottom: 40px;">
                 <p style="font-size: clamp(1.2rem, 3vw, 1.8rem); font-weight: 700; margin-bottom: 25px; line-height: 1.3;">
                     Ломаем баннерную слепоту.<br>Создаем видео, которые досматривают.
                 </p>
-                
                 <ul style="list-style: none; font-size: 1.1rem; font-weight: 600; color: var(--text-dim); line-height: 2.2;">
                     <li><span style="color: var(--accent); margin-right: 10px;">▫️</span> От хаоса в голове до готового рендера.</li>
                     <li><span style="color: var(--accent); margin-right: 10px;">▫️</span> 4 года в индустрии.</li>
                 </ul>
-
                 <p style="margin-top: 30px; font-size: 1.3rem; font-weight: 800; color: var(--text);">
                     Не просто снимаем, а <span style="background: var(--surface); padding: 0 10px; border-radius: 8px; border-bottom: 2px solid var(--accent);">упаковываем смыслы.</span>
                 </p>
@@ -157,24 +187,37 @@
     <section class="page" id="portfolio">
         <h2 style="font-family: 'Syncopate'; margin-bottom: 30px; font-size: 0.8rem; color: var(--accent);">SELECTED WORKS</h2>
         <div class="grid">
-            <div class="card"><video src="Vid3.mp4" loop muted playsinline></video></div>
-            <div class="card"><video src="Vid2.mp4" loop muted playsinline></video></div>
-            <div class="card"><video src="Vid3.mp4" loop muted playsinline></video></div>
-            <div class="card"><video src="Vid1_compressed.mp4" loop muted playsinline></video></div>
-            <div class="card"><video src="Vid2.mp4" loop muted playsinline></video></div>
-            <div class="card"><video src="Vid3.mp4" loop muted playsinline></video></div>
+            <div class="card" onclick="playFullVideo(this)">
+                <div class="v-cover"><div class="play-icon"></div></div>
+                <video src="Vid3.mp4" loop muted playsinline></video>
+            </div>
+            <div class="card" onclick="playFullVideo(this)">
+                <div class="v-cover"><div class="play-icon"></div></div>
+                <video src="Vid2.mp4" loop muted playsinline></video>
+            </div>
+            <div class="card" onclick="playFullVideo(this)">
+                <div class="v-cover"><div class="play-icon"></div></div>
+                <video src="Vid3.mp4" loop muted playsinline></video>
+            </div>
+            <div class="card" onclick="playFullVideo(this)">
+                <div class="v-cover"><div class="play-icon"></div></div>
+                <video src="Vid1_compressed.mp4" loop muted playsinline></video>
+            </div>
+            <div class="card" onclick="playFullVideo(this)">
+                <div class="v-cover"><div class="play-icon"></div></div>
+                <video src="Vid2.mp4" loop muted playsinline></video>
+            </div>
+            <div class="card" onclick="playFullVideo(this)">
+                <div class="v-cover"><div class="play-icon"></div></div>
+                <video src="Vid3.mp4" loop muted playsinline></video>
+            </div>
         </div>
     </section>
 
     <section class="page" id="about">
         <div style="max-width: 800px;">
             <h2 style="font-family: 'Syncopate'; font-size: 2.5rem; margin-bottom: 30px;">STRATEGY</h2>
-            <p style="font-size: clamp(1.2rem, 3vw, 1.8rem); line-height: 1.5; font-weight: 600;">
-                В СММ картинка без смысла — это мусор. Я создаю контент, который цепляет внимание в первые <span style="color: var(--accent);">2 секунды</span> и удерживает его до конца.
-            </p>
-            <p style="margin-top: 20px; color: var(--text-dim); font-size: 1.1rem; line-height: 1.8;">
-                Мой подход: глубокая аналитика трендов + техническое совершенство. Каждый кадр работает на результат, будь то охваты или прямые продажи.
-            </p>
+            <p style="font-size: clamp(1.2rem, 3vw, 1.8rem); line-height: 1.5; font-weight: 600;">В СММ картинка без смысла — это мусор. Я создаю контент, который цепляет внимание в первые <span style="color: var(--accent);">2 секунды</span> и удерживает его до конца.</p>
         </div>
     </section>
 
@@ -200,11 +243,8 @@
 
         init() {
             window.addEventListener('load', () => {
-                setTimeout(() => {
-                    this.loader.classList.add('hide');
-                }, 2200);
+                setTimeout(() => { this.loader.classList.add('hide'); }, 2200);
             });
-
             this.setupRouter();
             this.setupCursor();
             this.setupVideoObserver();
@@ -239,13 +279,45 @@
                 entries.forEach(entry => {
                     const v = entry.target.querySelector('video');
                     if (v) {
-                        if (entry.isIntersecting) v.play().catch(() => {});
-                        else v.pause();
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('ready');
+                            v.play().catch(() => {});
+                        } else {
+                            v.pause();
+                        }
                     }
                 });
             }, { threshold: 0.1 });
             document.querySelectorAll('.card').forEach(c => obs.observe(c));
         }
+    }
+
+    // Функция YouTube-логики
+    function playFullVideo(card) {
+        const video = card.querySelector('video');
+        
+        // Включаем звук
+        video.muted = false;
+        
+        // Полноэкранный режим
+        if (video.requestFullscreen) video.requestFullscreen();
+        else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
+        else if (video.msRequestFullscreen) video.msRequestFullscreen();
+
+        video.play();
+        card.classList.add('playing');
+
+        // Обработка выхода из полноэкранного режима
+        const exitHandler = () => {
+            if (!document.fullscreenElement && !document.webkitIsFullScreen) {
+                video.muted = true;
+                card.classList.remove('playing');
+                document.removeEventListener('fullscreenchange', exitHandler);
+                document.removeEventListener('webkitfullscreenchange', exitHandler);
+            }
+        };
+        document.addEventListener('fullscreenchange', exitHandler);
+        document.addEventListener('webkitfullscreenchange', exitHandler);
     }
 
     new SmmEngine();
