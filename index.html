@@ -36,8 +36,8 @@
         #cursor-aura { width: 44px; height: 44px; border: 1.5px solid var(--accent); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transition: transform 0.15s ease-out; box-shadow: 0 0 15px var(--accent-glow); display: none; }
         @media (pointer: fine) { #cursor-dot, #cursor-aura { display: block; } }
 
-        /* --- Layout --- */
-        header { width: 100%; padding: 60px 0 30px; display: flex; flex-direction: column; align-items: center; }
+        /* --- UI Components --- */
+        header { width: 100%; padding: 60px 0 30px; display: flex; flex-direction: column; align-items: center; transition: 0.5s var(--ease); }
         .logo-box { font-family: 'Syncopate'; font-size: 14px; letter-spacing: 10px; color: var(--text); margin-bottom: 45px; }
         .logo-box span { color: var(--accent); }
 
@@ -46,48 +46,55 @@
             backdrop-filter: blur(20px); border: 1px solid rgba(14, 165, 233, 0.15); position: sticky; top: 25px; z-index: 9000;
             box-shadow: 0 15px 35px rgba(14, 165, 233, 0.1);
         }
-        .nav-item { padding: 14px 30px; border-radius: var(--radius-sm); border: none; background: transparent; color: var(--text-dim); font-weight: 800; font-size: 11px; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
-        .nav-item.active { background: var(--accent); color: #fff; }
+        .nav-item { padding: 14px 30px; border-radius: var(--radius-sm); border: none; background: transparent; color: var(--text-dim); font-weight: 800; font-size: 11px; cursor: pointer; text-transform: uppercase; transition: 0.4s var(--ease); letter-spacing: 1px; }
+        .nav-item.active { background: var(--accent); color: #fff; box-shadow: 0 8px 20px var(--accent-glow); }
 
-        main { width: 100%; max-width: 1300px; margin: 0 auto; padding: 40px 7% 120px; }
+        /* --- Main Layout --- */
+        main { width: 100%; max-width: 1300px; margin: 0 auto; padding: 40px 7% 120px; transition: opacity 0.5s; }
         .section { display: none; opacity: 0; transform: translateY(50px); }
         .section.active { display: block; animation: sectionReveal 0.8s var(--ease) forwards; }
         @keyframes sectionReveal { to { opacity: 1; transform: translateY(0); } }
 
-        /* --- UI Elements --- */
+        /* --- Hero & Stats --- */
         .hero-title { font-size: clamp(2.2rem, 8vw, 5.2rem); font-weight: 900; line-height: 1; letter-spacing: -3px; margin-bottom: 35px; }
         .hero-title span { color: var(--accent); }
         
         .stats-slider { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 40px; scrollbar-width: none; }
-        .stat-card { min-width: 280px; padding: 40px; background: #fff; border-radius: var(--radius-lg); border: 1px solid rgba(14, 165, 233, 0.1); transition: 0.5s; }
-        .stat-card h3 { font-size: 3.5rem; color: var(--accent); font-weight: 900; }
+        .stat-card { min-width: 280px; padding: 40px; background: #fff; border-radius: var(--radius-lg); border: 1px solid rgba(14, 165, 233, 0.1); transition: 0.5s var(--ease); }
+        .stat-card:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .stat-card h3 { font-size: 3.5rem; color: var(--accent); font-weight: 900; line-height: 1; margin-bottom: 10px; }
+        .stat-card p { font-size: 11px; font-weight: 800; opacity: 0.6; letter-spacing: 2px; text-transform: uppercase; }
 
-        /* --- Portfolio --- */
+        /* --- Portfolio Grid --- */
         .portfolio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
-        .video-card { background: #000; border-radius: var(--radius-lg); aspect-ratio: 16/9; overflow: hidden; position: relative; cursor: pointer; transition: 0.6s; }
-        .video-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px var(--accent-glow); }
-        .video-card video { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; pointer-events: none; }
+        .video-card { background: #000; border-radius: var(--radius-lg); aspect-ratio: 16/9; overflow: hidden; position: relative; cursor: pointer; transition: 0.7s var(--ease); border: 2px solid transparent; }
+        .video-card:hover { transform: translateY(-12px) scale(1.02); border-color: var(--accent); box-shadow: 0 25px 50px var(--accent-glow); }
+        .video-card video { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: 0.6s; display: block; pointer-events: none; }
+        .video-card:hover video { opacity: 1; }
+        .card-label { position: absolute; bottom: 25px; left: 25px; z-index: 10; font-family: 'Syncopate'; font-size: 9px; color: #fff; letter-spacing: 2px; }
 
-        /* --- About Visuals --- */
-        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px; }
-        .about-feature { background: #fff; padding: 30px; border-radius: 24px; border: 1px solid rgba(14, 165, 233, 0.1); transition: 0.4s; }
-        .about-feature:hover { border-color: var(--accent); transform: scale(1.02); }
-        .about-feature h4 { color: var(--accent); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
-        .about-feature p { font-weight: 600; color: var(--text-dim); line-height: 1.6; }
+        /* --- About Grid --- */
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 40px; }
+        .about-feature { background: #fff; padding: 35px; border-radius: 28px; border: 1px solid rgba(14, 165, 233, 0.1); transition: 0.4s var(--ease); }
+        .about-feature:hover { border-color: var(--accent); transform: translateY(-5px); }
+        .about-feature h4 { color: var(--accent); font-size: 11px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 15px; font-weight: 800; }
+        .about-feature p { font-weight: 600; color: var(--text-dim); line-height: 1.7; font-size: 1.05rem; }
 
         /* --- Fullscreen Overlay --- */
         #video-overlay { position: fixed; inset: 0; background: #000; z-index: 1000000; display: none; align-items: center; justify-content: center; }
         #video-overlay video { width: 100%; height: 100%; object-fit: contain; }
-        .close-btn { position: absolute; top: 30px; right: 30px; width: 50px; height: 50px; background: rgba(255,255,255,0.1); border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; z-index: 1000001; }
+        .close-btn { position: absolute; top: 30px; right: 30px; width: 55px; height: 55px; background: rgba(255,255,255,0.1); border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 35px; cursor: pointer; z-index: 1000001; backdrop-filter: blur(15px); transition: 0.3s; }
+        .close-btn:hover { background: var(--accent); transform: rotate(90deg); }
 
-        /* --- Contacts --- */
-        .contact-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .contact-link { padding: 45px; background: #fff; border-radius: var(--radius-lg); text-decoration: none; color: var(--text); border: 1px solid rgba(14,165,233,0.1); transition: 0.5s; }
-        .contact-link:hover { transform: translateY(-8px); border-color: var(--accent); box-shadow: 0 20px 40px var(--accent-glow); }
-        .contact-link span { font-size: 11px; color: var(--accent); font-weight: 800; letter-spacing: 3px; display: block; margin-bottom: 12px; }
-        .contact-link h4 { font-size: 1.8rem; font-weight: 800; }
+        /* --- Contact Grid --- */
+        .contact-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; }
+        .contact-link { padding: 50px; background: #fff; border-radius: var(--radius-lg); text-decoration: none; color: var(--text); border: 1px solid rgba(14,165,233,0.1); transition: 0.5s var(--ease); }
+        .contact-link:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 25px 50px var(--accent-glow); }
+        .contact-link span { font-size: 12px; color: var(--accent); font-weight: 800; letter-spacing: 3px; display: block; margin-bottom: 15px; }
+        .contact-link h4 { font-size: 2rem; font-weight: 800; }
 
-        @media (max-width: 768px) { .portfolio-grid, .contact-grid, .about-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 1024px) { .portfolio-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 768px) { .portfolio-grid, .contact-grid, .about-grid { grid-template-columns: 1fr; } .hero-title { font-size: 2.8rem; } }
     </style>
 </head>
 <body>
@@ -116,45 +123,37 @@
             <div class="stats-slider">
                 <div class="stat-card"><h3>+340%</h3><p>Эффективность контента</p></div>
                 <div class="stat-card"><h3>1.2M+</h3><p>Суммарный охват</p></div>
-                <div class="stat-card"><h3>24/7</h3><p>Поддержка проектов</p></div>
+                <div class="stat-card"><h3>24/7</h3><p>Креативный цикл</p></div>
             </div>
         </section>
 
         <section id="portfolio" class="section">
             <div class="portfolio-grid">
                 <div class="video-card" onclick="core.play('Vid1.mp4')">
-                    <video loop muted playsinline autoplay><source src="Vid1.mp4" type="video/mp4"></video>
+                    <video loop muted playsinline autoplay poster="Vid1.jpg"><source src="Vid1.mp4" type="video/mp4"></video>
+                    <div class="card-label">// COMMERCIAL</div>
                 </div>
                 <div class="video-card" onclick="core.play('Vid2.mp4')">
-                    <video loop muted playsinline autoplay><source src="Vid2.mp4" type="video/mp4"></video>
+                    <video loop muted playsinline autoplay poster="Vid2.jpg"><source src="Vid2.mp4" type="video/mp4"></video>
+                    <div class="card-label">// VFX EDIT</div>
                 </div>
                 <div class="video-card" onclick="core.play('Vid3.mp4')">
-                    <video loop muted playsinline autoplay><source src="Vid3.mp4" type="video/mp4"></video>
+                    <video loop muted playsinline autoplay poster="Vid3.jpg"><source src="Vid3.mp4" type="video/mp4"></video>
+                    <div class="card-label">// STORYTELLING</div>
                 </div>
             </div>
         </section>
 
         <section id="about" class="section">
             <h1 class="hero-title">Магия в каждом <span>кадре.</span></h1>
-            <p style="font-size: 1.2rem; font-weight: 600; color: var(--text-dim); max-width: 700px; margin-bottom: 40px;">Я создаю не просто ролики, а инструменты для роста вашего бизнеса и личного бренда.</p>
-            
+            <p style="font-size: 1.25rem; font-weight: 600; color: var(--text-dim); max-width: 800px; margin-bottom: 40px; line-height: 1.6;">
+                Я создаю визуальные решения, которые превращают зрителей в лояльных клиентов.
+            </p>
             <div class="about-grid">
-                <div class="about-feature">
-                    <h4>Concept</h4>
-                    <p>Разработка уникального сценария и визуального стиля под вашу нишу.</p>
-                </div>
-                <div class="about-feature">
-                    <h4>Editing</h4>
-                    <p>Динамичный монтаж с использованием передовых техник удержания внимания.</p>
-                </div>
-                <div class="about-feature">
-                    <h4>VFX</h4>
-                    <p>Сложные визуальные эффекты, которые выделяют вас среди конкурентов.</p>
-                </div>
-                <div class="about-feature">
-                    <h4>Color</h4>
-                    <p>Кинематографичный цветокоррект, создающий нужную атмосферу.</p>
-                </div>
+                <div class="about-feature"><h4>Concept</h4><p>Разработка сценариев, которые цепляют с первой секунды.</p></div>
+                <div class="about-feature"><h4>Editing</h4><p>Профессиональный монтаж с динамикой мирового уровня.</p></div>
+                <div class="about-feature"><h4>VFX</h4><p>Визуальные эффекты любой сложности для вашего бренда.</p></div>
+                <div class="about-feature"><h4>Color</h4><p>Премиальная цветокоррекция в стиле большого кино.</p></div>
             </div>
         </section>
 
@@ -195,7 +194,7 @@ class ProductionCore {
                     s.classList.remove('active');
                     if(s.id === btn.dataset.page) s.classList.add('active');
                 });
-                window.scrollTo(0,0);
+                window.scrollTo({top: 0, behavior: 'smooth'});
             };
         });
     }
@@ -221,7 +220,7 @@ class ProductionCore {
         this.player.load();
         this.overlay.style.display = 'flex';
         document.body.style.overflow = 'hidden';
-        this.player.play();
+        this.player.play().catch(() => console.log("User interaction required"));
         history.pushState({view: 'video'}, '');
     }
 
@@ -236,8 +235,8 @@ class ProductionCore {
         document.querySelectorAll('.nav-item, .contact-link, .stat-card, .about-feature').forEach(el => {
             el.onmousemove = e => {
                 const r = el.getBoundingClientRect();
-                const x = (e.clientX - r.left - r.width/2) * 0.2;
-                const y = (e.clientY - r.top - r.height/2) * 0.2;
+                const x = (e.clientX - r.left - r.width/2) * 0.25;
+                const y = (e.clientY - r.top - r.height/2) * 0.25;
                 el.style.transform = `translate(${x}px, ${y}px)`;
             };
             el.onmouseleave = () => el.style.transform = 'translate(0,0)';
@@ -247,5 +246,5 @@ class ProductionCore {
 const core = new ProductionCore();
 </script>
 </body>
-    </html>
-    
+                                                    </html>
+                                                    
