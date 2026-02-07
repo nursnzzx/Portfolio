@@ -75,19 +75,25 @@
         @keyframes sectionReveal { to { opacity: 1; transform: translateY(0); } }
 
         /* --- HOME ELEMENTS --- */
-        .hero-title { font-size: clamp(2.2rem, 8vw, 5.2rem); font-weight: 900; line-height: 1; letter-spacing: -3px; margin-bottom: 35px; }
+        .hero-title { font-size: clamp(2.2rem, 8vw, 5rem); font-weight: 900; line-height: 1.1; letter-spacing: -3px; margin-bottom: 25px; }
         .hero-title span { color: var(--accent); }
-        .cta-button { display: inline-block; padding: 22px 45px; background: var(--accent); color: #fff; text-decoration: none; border-radius: var(--radius-sm); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 15px 30px var(--accent-glow); transition: 0.3s; margin-top: 20px;}
+        
+        .hero-lead { font-size: 1.4rem; font-weight: 700; color: var(--text); margin-bottom: 20px; line-height: 1.4; max-width: 700px; }
+        .hero-list { list-style: none; margin-bottom: 35px; }
+        .hero-list li { font-size: 1.1rem; font-weight: 600; color: var(--text-dim); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+        .hero-tagline { font-size: 1.2rem; font-weight: 800; color: var(--text); margin-top: 25px; border-left: 4px solid var(--accent); padding-left: 15px; }
+
+        .cta-button { display: inline-block; padding: 22px 45px; background: var(--accent); color: #fff; text-decoration: none; border-radius: var(--radius-sm); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 15px 30px var(--accent-glow); transition: 0.3s; margin-top: 10px;}
         .cta-button:hover { transform: scale(1.05); }
 
-        .stats-slider { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 40px; scrollbar-width: none; margin-top: 50px; }
-        .stat-card { min-width: 280px; padding: 40px; background: #fff; border-radius: var(--radius-lg); border: 1px solid rgba(14, 165, 233, 0.1); transition: 0.5s; }
+        .stats-slider { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 40px; scrollbar-width: none; margin-top: 60px; }
+        .stat-card { min-width: 280px; padding: 40px; background: #fff; border-radius: var(--radius-lg); border: 1px solid rgba(14, 165, 233, 0.1); }
         .stat-card h3 { font-size: 3.5rem; color: var(--accent); font-weight: 900; line-height: 1; margin-bottom: 10px; }
         .stat-card p { font-size: 11px; font-weight: 800; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; }
 
         .workflow-title { font-size: 1.5rem; font-weight: 800; margin: 80px 0 30px; text-transform: uppercase; letter-spacing: 2px; }
         .workflow-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-        .flow-card { padding: 35px; background: #fff; border-radius: 28px; border: 1px solid rgba(14, 165, 233, 0.1); transition: 0.4s; }
+        .flow-card { padding: 35px; background: #fff; border-radius: 28px; border: 1px solid rgba(14, 165, 233, 0.1); }
         .flow-card span { font-size: 3rem; opacity: 0.1; font-weight: 900; display: block; line-height: 1; margin-bottom: 15px; }
         .flow-card h4 { color: var(--accent); font-size: 1.1rem; margin-bottom: 12px; font-weight: 800; }
         .flow-card p { font-weight: 600; color: var(--text-dim); line-height: 1.6; }
@@ -107,9 +113,7 @@
         /* --- Contact --- */
         .contact-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; }
         .contact-link { padding: 50px; background: #fff; border-radius: var(--radius-lg); text-decoration: none; color: var(--text); border: 1px solid rgba(14,165,233,0.1); transition: 0.5s; }
-        .contact-link:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 20px 40px var(--accent-glow); }
-        .contact-link span { font-size: 11px; color: var(--accent); font-weight: 800; letter-spacing: 2px; }
-        .contact-link h4 { font-size: 1.8rem; margin-top: 10px; }
+        .contact-link:hover { transform: translateY(-10px); border-color: var(--accent); }
 
         @media (max-width: 768px) { .portfolio-grid, .contact-grid, .workflow-grid { grid-template-columns: 1fr; } .hero-title { font-size: 2.8rem; } }
     </style>
@@ -143,16 +147,23 @@
 
     <main>
         <section id="home" class="section active">
-            <h1 class="hero-title">Видеопродакшн<br><span>полного цикла 🎥</span></h1>
-            <p style="font-size: 1.2rem; color: var(--text-dim); font-weight: 600; max-width: 600px; line-height: 1.6; margin-bottom: 30px;">
-                Помогаю брендам ломать баннерную слепоту через упаковку смыслов и сочный монтаж.
-            </p>
-            <a href="https://t.me/nursnzz" class="cta-button">Обсудить проект →</a>
+            <h1 class="hero-title">Видеопродакшн<br>полного цикла 🎥</h1>
+            
+            <p class="hero-lead">Ломаем баннерную слепоту. Создаем видео, которые досматривают.</p>
+            
+            <ul class="hero-list">
+                <li>▫️ От хаоса в голове до готового рендера.</li>
+                <li>▫️ 4 года в индустрии.</li>
+            </ul>
+
+            <p class="hero-tagline">Не просто снимаем, а упаковываем смыслы.</p>
+
+            <a href="https://t.me/nursnzz" class="cta-button" style="margin-top: 40px;">Обсудить проект →</a>
 
             <div class="stats-slider">
                 <div class="stat-card"><h3>+340%</h3><p>Удержание внимания</p></div>
                 <div class="stat-card"><h3>1.2M+</h3><p>Суммарный охват</p></div>
-                <div class="stat-card"><h3>4 года</h3><p>Опыта в нише</p></div>
+                <div class="stat-card"><h3>24/7</h3><p>На связи</p></div>
             </div>
 
             <h3 class="workflow-title">Как я работаю</h3>
@@ -213,11 +224,9 @@ class ProductionCore {
         window.addEventListener('load', () => {
             setTimeout(() => { this.intro.classList.add('hide'); }, 2400);
         });
-
         this.setupNavigation();
         this.setupCursor();
         this.setupMagnetic();
-        window.onpopstate = () => this.stop();
     }
 
     setupNavigation() {
@@ -255,7 +264,6 @@ class ProductionCore {
         this.overlay.style.display = 'flex';
         document.body.style.overflow = 'hidden';
         this.player.play();
-        history.pushState({view: 'video'}, '');
     }
 
     stop() {
