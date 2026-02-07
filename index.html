@@ -31,7 +31,6 @@
                               radial-gradient(circle at 100% 100%, rgba(14, 165, 233, 0.05) 0%, transparent 40%);
         }
 
-        /* --- UI Elements --- */
         #cursor-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; position: fixed; pointer-events: none; z-index: 10000; display: none; }
         #cursor-aura { width: 44px; height: 44px; border: 1.5px solid var(--accent); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transition: transform 0.15s ease-out; box-shadow: 0 0 15px var(--accent-glow); display: none; }
         @media (pointer: fine) { #cursor-dot, #cursor-aura { display: block; } }
@@ -53,7 +52,6 @@
         .section.active { display: block; animation: sectionReveal 0.9s var(--ease) forwards; }
         @keyframes sectionReveal { to { opacity: 1; transform: translateY(0); } }
 
-        /* --- Home --- */
         .hero-title { font-size: clamp(2.2rem, 8vw, 5rem); font-weight: 900; line-height: 1.05; letter-spacing: -3px; margin-bottom: 35px; }
         .hero-title span { color: var(--accent); }
         .hero-description { border-left: 7px solid var(--accent); padding-left: 35px; margin-bottom: 60px; }
@@ -64,7 +62,6 @@
         .stat-card { min-width: 280px; padding: 40px; background: #fff; border-radius: var(--radius-lg); border: 1px solid rgba(14, 165, 233, 0.1); }
         .stat-card h3 { font-size: 3.2rem; color: var(--accent); font-weight: 900; }
 
-        /* --- Portfolio --- */
         .portfolio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
         .video-card {
             background: #000; border-radius: var(--radius-lg); aspect-ratio: 16/9;
@@ -73,7 +70,6 @@
         .video-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px var(--accent-glow); }
         .video-card video { width: 100%; height: 100%; object-fit: cover; }
 
-        /* --- Custom Modal (For PC) --- */
         #video-modal {
             position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 100000;
             display: none; align-items: center; justify-content: center; backdrop-filter: blur(15px);
@@ -81,7 +77,6 @@
         #video-modal video { width: 95%; max-width: 1100px; border-radius: 20px; }
         .close-modal { position: absolute; top: 30px; right: 30px; color: #fff; font-size: 45px; cursor: pointer; z-index: 100001; }
 
-        /* --- Contacts --- */
         .contact-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
         .contact-link { padding: 45px; background: var(--surface); border-radius: var(--radius-lg); text-decoration: none; color: var(--text); border: 1px solid rgba(14, 165, 233, 0.1); transition: 0.4s; }
         .contact-link:hover { transform: translateY(-5px); box-shadow: 0 15px 30px var(--accent-glow); }
@@ -126,23 +121,23 @@
 
         <section id="portfolio" class="section">
             <div class="portfolio-grid">
-                <div class="video-card" onclick="openPlayer('vid1.mp4')">
-                    <video src="vid1.mp4" loop muted playsinline autoplay></video>
+                <div class="video-card" onclick="openPlayer('Vid1.mp4')">
+                    <video src="Vid1.mp4" loop muted playsinline autoplay></video>
                 </div>
-                <div class="video-card" onclick="openPlayer('vid2.mp4')">
-                    <video src="vid2.mp4" loop muted playsinline autoplay></video>
+                <div class="video-card" onclick="openPlayer('Vid2.mp4')">
+                    <video src="Vid2.mp4" loop muted playsinline autoplay></video>
                 </div>
-                <div class="video-card" onclick="openPlayer('vid3.mp4')">
-                    <video src="vid3.mp4" loop muted playsinline autoplay></video>
+                <div class="video-card" onclick="openPlayer('Vid3.mp4')">
+                    <video src="Vid3.mp4" loop muted playsinline autoplay></video>
                 </div>
-                <div class="video-card" onclick="openPlayer('vid1.mp4')">
-                    <video src="vid1.mp4" loop muted playsinline autoplay></video>
+                <div class="video-card" onclick="openPlayer('Vid1.mp4')">
+                    <video src="Vid1.mp4" loop muted playsinline autoplay></video>
                 </div>
-                <div class="video-card" onclick="openPlayer('vid2.mp4')">
-                    <video src="vid2.mp4" loop muted playsinline autoplay></video>
+                <div class="video-card" onclick="openPlayer('Vid2.mp4')">
+                    <video src="Vid2.mp4" loop muted playsinline autoplay></video>
                 </div>
-                <div class="video-card" onclick="openPlayer('vid3.mp4')">
-                    <video src="vid3.mp4" loop muted playsinline autoplay></video>
+                <div class="video-card" onclick="openPlayer('Vid3.mp4')">
+                    <video src="Vid3.mp4" loop muted playsinline autoplay></video>
                 </div>
             </div>
         </section>
@@ -165,7 +160,6 @@
     </main>
 
 <script>
-// Переключение разделов
 const btns = document.querySelectorAll('.nav-item');
 const sections = document.querySelectorAll('.section');
 
@@ -181,19 +175,16 @@ btns.forEach(btn => {
     }
 });
 
-// Продвинутый плеер
 const modal = document.getElementById('video-modal');
 const player = document.getElementById('modal-player');
 const closeBtn = document.querySelector('.close-modal');
 
 function openPlayer(src) {
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    
     player.src = src;
-    player.muted = false; // Включаем звук для полного режима
+    player.muted = false;
 
     if (isMobile) {
-        // На мобилках используем встроенный полноэкранный режим
         if (player.requestFullscreen) {
             player.requestFullscreen();
         } else if (player.webkitEnterFullscreen) {
@@ -201,13 +192,11 @@ function openPlayer(src) {
         }
         player.play();
     } else {
-        // На ПК используем модальное окно
         modal.style.display = 'flex';
         player.play();
     }
 }
 
-// Закрытие для ПК
 closeBtn.onclick = () => {
     modal.style.display = 'none';
     player.pause();
@@ -216,7 +205,6 @@ closeBtn.onclick = () => {
 
 modal.onclick = (e) => { if(e.target === modal) closeBtn.onclick(); };
 
-// Курсор
 let dot = document.getElementById('cursor-dot'), aura = document.getElementById('cursor-aura');
 let mx = 0, my = 0, ax = 0, ay = 0;
 window.onmousemove = e => { mx = e.clientX; my = e.clientY; dot.style.left = mx+'px'; dot.style.top = my+'px'; };
