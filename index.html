@@ -18,30 +18,38 @@
             --text-dim: #64748b;
             --radius-lg: 32px;
             --radius-sm: 100px;
-            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease: cubic-bezier(.2,1,.2,1);
         }
 
+        /* ===== ТВОЕ ГОЛУБОЕ ИНТРО ===== */
+        .intro {
+            position: fixed; inset: 0; background: var(--accent);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 1000000; clip-path: circle(150% at 50% 50%);
+            transition: clip-path 1.2s cubic-bezier(0.8, 0, 0.2, 1); padding: 20px;
+        }
+        .intro.hide { clip-path: circle(0% at 50% 50%); }
+        .intro h1 {
+            font-size: clamp(22px, 6vw, 42px); font-weight: 900; color: #fff;
+            margin: 0; letter-spacing: -1px; display: flex; gap: 8px; font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .intro span {
+            display: inline-block; opacity: 0; transform: translateY(20px);
+            filter: blur(10px); animation: revealLight 0.7s var(--ease) forwards;
+        }
+        .intro span:nth-child(1) { animation-delay: 0.2s; }
+        .intro span:nth-child(2) { animation-delay: 0.4s; opacity: 0.7; }
+        .intro span:nth-child(3) { animation-delay: 0.6s; }
+        .loader-bar {
+            width: 0%; height: 4px; background: #fff; margin-top: 15px; border-radius: 10px;
+            animation: loadProgress 1.4s ease-in-out forwards; animation-delay: 0.3s;
+        }
+        @keyframes revealLight { to { opacity: 1; transform: translateY(0); filter: blur(0); } }
+        @keyframes loadProgress { from { width: 0%; } to { width: 100%; } }
+
+        /* --- Global Reset --- */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
-        
-        body { 
-            background: var(--bg); color: var(--text); 
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            overflow-x: hidden;
-            background-image: radial-gradient(circle at 0% 0%, rgba(14, 165, 233, 0.05) 0%, transparent 40%);
-        }
-
-        /* --- INTRO LOADER --- */
-        #intro-screen {
-            position: fixed; inset: 0; background: #000; z-index: 2000000;
-            display: flex; align-items: center; justify-content: center;
-            transition: opacity 1s var(--ease), visibility 1s;
-        }
-        .intro-logo {
-            font-family: 'Syncopate'; font-size: 24px; color: #fff; letter-spacing: 15px;
-            animation: pulse 2s infinite ease-in-out;
-        }
-        .intro-logo span { color: var(--accent); }
-        @keyframes pulse { 0%, 100% { opacity: 0.5; transform: scale(0.98); } 50% { opacity: 1; transform: scale(1); } }
+        body { background: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
 
         /* --- Cursor --- */
         #cursor-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; position: fixed; pointer-events: none; z-index: 10000; display: none; }
@@ -58,48 +66,61 @@
             backdrop-filter: blur(20px); border: 1px solid rgba(14, 165, 233, 0.15); position: sticky; top: 25px; z-index: 9000;
             box-shadow: 0 15px 35px rgba(14, 165, 233, 0.1);
         }
-        .nav-item { padding: 14px 30px; border-radius: var(--radius-sm); border: none; background: transparent; color: var(--text-dim); font-weight: 800; font-size: 11px; cursor: pointer; text-transform: uppercase; transition: 0.4s var(--ease); }
-        .nav-item.active { background: var(--accent); color: #fff; box-shadow: 0 8px 20px var(--accent-glow); }
+        .nav-item { padding: 14px 30px; border-radius: var(--radius-sm); border: none; background: transparent; color: var(--text-dim); font-weight: 800; font-size: 11px; cursor: pointer; text-transform: uppercase; transition: 0.4s; }
+        .nav-item.active { background: var(--accent); color: #fff; }
 
         main { width: 100%; max-width: 1300px; margin: 0 auto; padding: 40px 7% 120px; }
         .section { display: none; opacity: 0; transform: translateY(50px); }
         .section.active { display: block; animation: sectionReveal 0.8s var(--ease) forwards; }
         @keyframes sectionReveal { to { opacity: 1; transform: translateY(0); } }
 
-        /* --- Hero Section --- */
+        /* --- HOME ELEMENTS --- */
         .hero-title { font-size: clamp(2.2rem, 8vw, 5.2rem); font-weight: 900; line-height: 1; letter-spacing: -3px; margin-bottom: 35px; }
         .hero-title span { color: var(--accent); }
-        .cta-button { display: inline-block; padding: 22px 45px; background: var(--accent); color: #fff; text-decoration: none; border-radius: var(--radius-sm); font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; margin-top: 20px; transition: 0.4s; box-shadow: 0 15px 30px var(--accent-glow); }
+        .cta-button { display: inline-block; padding: 22px 45px; background: var(--accent); color: #fff; text-decoration: none; border-radius: var(--radius-sm); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 15px 30px var(--accent-glow); transition: 0.3s; margin-top: 20px;}
         .cta-button:hover { transform: scale(1.05); }
 
-        .stats-slider { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 40px; scrollbar-width: none; margin-top: 40px; }
-        .stat-card { min-width: 280px; padding: 40px; background: #fff; border-radius: var(--radius-lg); border: 1px solid rgba(14, 165, 233, 0.1); }
-        .stat-card h3 { font-size: 3.5rem; color: var(--accent); font-weight: 900; }
+        .stats-slider { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 40px; scrollbar-width: none; margin-top: 50px; }
+        .stat-card { min-width: 280px; padding: 40px; background: #fff; border-radius: var(--radius-lg); border: 1px solid rgba(14, 165, 233, 0.1); transition: 0.5s; }
+        .stat-card h3 { font-size: 3.5rem; color: var(--accent); font-weight: 900; line-height: 1; margin-bottom: 10px; }
+        .stat-card p { font-size: 11px; font-weight: 800; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; }
+
+        .workflow-title { font-size: 1.5rem; font-weight: 800; margin: 80px 0 30px; text-transform: uppercase; letter-spacing: 2px; }
+        .workflow-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .flow-card { padding: 35px; background: #fff; border-radius: 28px; border: 1px solid rgba(14, 165, 233, 0.1); transition: 0.4s; }
+        .flow-card span { font-size: 3rem; opacity: 0.1; font-weight: 900; display: block; line-height: 1; margin-bottom: 15px; }
+        .flow-card h4 { color: var(--accent); font-size: 1.1rem; margin-bottom: 12px; font-weight: 800; }
+        .flow-card p { font-weight: 600; color: var(--text-dim); line-height: 1.6; }
 
         /* --- Portfolio --- */
         .portfolio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
         .video-card { background: #000; border-radius: var(--radius-lg); aspect-ratio: 16/9; overflow: hidden; position: relative; cursor: pointer; transition: 0.7s; border: 2px solid transparent; }
-        .video-card:hover { transform: translateY(-12px); border-color: var(--accent); }
+        .video-card:hover { transform: translateY(-12px); border-color: var(--accent); box-shadow: 0 25px 50px var(--accent-glow); }
         .video-card video { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; pointer-events: none; }
-        .card-label { position: absolute; bottom: 25px; left: 25px; font-family: 'Syncopate'; font-size: 9px; color: #fff; letter-spacing: 2px; }
+        .card-label { position: absolute; bottom: 25px; left: 25px; font-family: 'Syncopate'; font-size: 9px; color: #fff; letter-spacing: 2px; z-index: 5; }
 
-        /* --- Video Overlay --- */
+        /* --- Overlay --- */
         #video-overlay { position: fixed; inset: 0; background: #000; z-index: 1000000; display: none; align-items: center; justify-content: center; }
         #video-overlay video { width: 100%; height: 100%; object-fit: contain; }
         .close-btn { position: absolute; top: 30px; right: 30px; width: 55px; height: 55px; background: rgba(255,255,255,0.1); border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 35px; cursor: pointer; z-index: 1000001; }
 
-        /* --- Contacts --- */
+        /* --- Contact --- */
         .contact-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; }
         .contact-link { padding: 50px; background: #fff; border-radius: var(--radius-lg); text-decoration: none; color: var(--text); border: 1px solid rgba(14,165,233,0.1); transition: 0.5s; }
-        .contact-link:hover { transform: translateY(-10px); border-color: var(--accent); }
+        .contact-link:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 20px 40px var(--accent-glow); }
+        .contact-link span { font-size: 11px; color: var(--accent); font-weight: 800; letter-spacing: 2px; }
+        .contact-link h4 { font-size: 1.8rem; margin-top: 10px; }
 
-        @media (max-width: 768px) { .portfolio-grid, .contact-grid { grid-template-columns: 1fr; } .hero-title { font-size: 2.8rem; } }
+        @media (max-width: 768px) { .portfolio-grid, .contact-grid, .workflow-grid { grid-template-columns: 1fr; } .hero-title { font-size: 2.8rem; } }
     </style>
 </head>
 <body>
 
-    <div id="intro-screen">
-        <div class="intro-logo">NUR1<span>.</span>AEP</div>
+    <div class="intro" id="intro-screen">
+        <div class="intro-content">
+            <h1><span>Nur1.AEP</span><span>|</span><span>Sula.Core</span></h1>
+            <div class="loader-bar"></div>
+        </div>
     </div>
 
     <div id="cursor-dot"></div>
@@ -123,11 +144,22 @@
     <main>
         <section id="home" class="section active">
             <h1 class="hero-title">Видеопродакшн<br><span>полного цикла 🎥</span></h1>
+            <p style="font-size: 1.2rem; color: var(--text-dim); font-weight: 600; max-width: 600px; line-height: 1.6; margin-bottom: 30px;">
+                Помогаю брендам ломать баннерную слепоту через упаковку смыслов и сочный монтаж.
+            </p>
             <a href="https://t.me/nursnzz" class="cta-button">Обсудить проект →</a>
+
             <div class="stats-slider">
-                <div class="stat-card"><h3>+340%</h3><p>Удержание</p></div>
-                <div class="stat-card"><h3>1.2M+</h3><p>Охват</p></div>
-                <div class="stat-card"><h3>24/7</h3><p>Креатив</p></div>
+                <div class="stat-card"><h3>+340%</h3><p>Удержание внимания</p></div>
+                <div class="stat-card"><h3>1.2M+</h3><p>Суммарный охват</p></div>
+                <div class="stat-card"><h3>4 года</h3><p>Опыта в нише</p></div>
+            </div>
+
+            <h3 class="workflow-title">Как я работаю</h3>
+            <div class="workflow-grid">
+                <div class="flow-card"><span>01</span><h4>Concept</h4><p>Анализ ниши и создание сценария, который цепляет.</p></div>
+                <div class="flow-card"><span>02</span><h4>Production</h4><p>Монтаж, саунд-дизайн и визуальные эффекты.</p></div>
+                <div class="flow-card"><span>03</span><h4>Result</h4><p>Готовый контент, который приносит просмотры и продажи.</p></div>
             </div>
         </section>
 
@@ -135,19 +167,26 @@
             <div class="portfolio-grid">
                 <div class="video-card" onclick="core.play('Vid1.mp4')">
                     <video loop muted playsinline autoplay poster="Vid1.jpg"><source src="Vid1.mp4" type="video/mp4"></video>
+                    <div class="card-label">// COMMERCIAL</div>
                 </div>
                 <div class="video-card" onclick="core.play('Vid2.mp4')">
                     <video loop muted playsinline autoplay poster="Vid2.jpg"><source src="Vid2.mp4" type="video/mp4"></video>
+                    <div class="card-label">// VFX EDIT</div>
                 </div>
                 <div class="video-card" onclick="core.play('Vid3.mp4')">
                     <video loop muted playsinline autoplay poster="Vid3.jpg"><source src="Vid3.mp4" type="video/mp4"></video>
+                    <div class="card-label">// MOTION ART</div>
                 </div>
             </div>
         </section>
 
         <section id="about" class="section">
             <h1 class="hero-title">Магия в <span>кадре.</span></h1>
-            <p style="font-size: 1.25rem; font-weight: 600; color: var(--text-dim);">Разработка сценариев, монтаж и VFX премиального уровня.</p>
+            <div class="workflow-grid" style="margin-top: 40px;">
+                <div class="flow-card"><h4>Editing</h4><p>Профессиональный монтаж с динамикой мирового уровня.</p></div>
+                <div class="flow-card"><h4>VFX</h4><p>Создание эффектов, которые заставляют зрителя удивляться.</p></div>
+                <div class="flow-card"><h4>Color</h4><p>Премиальная цветокоррекция для создания настроения.</p></div>
+            </div>
         </section>
 
         <section id="contact" class="section">
@@ -171,11 +210,9 @@ class ProductionCore {
     }
 
     init() {
-        // Убираем интро через 2 секунды
-        setTimeout(() => {
-            this.intro.style.opacity = '0';
-            setTimeout(() => this.intro.style.visibility = 'hidden', 1000);
-        }, 2000);
+        window.addEventListener('load', () => {
+            setTimeout(() => { this.intro.classList.add('hide'); }, 2400);
+        });
 
         this.setupNavigation();
         this.setupCursor();
@@ -202,14 +239,11 @@ class ProductionCore {
         const aura = document.getElementById('cursor-aura');
         window.onmousemove = e => { 
             this.mx = e.clientX; this.my = e.clientY; 
-            dot.style.left = this.mx + 'px'; 
-            dot.style.top = this.my + 'px'; 
+            dot.style.left = this.mx + 'px'; dot.style.top = this.my + 'px'; 
         };
         const tick = () => {
-            this.ax += (this.mx - this.ax) * 0.15; 
-            this.ay += (this.my - this.ay) * 0.15;
-            aura.style.left = (this.ax - 22) + 'px';
-            aura.style.top = (this.ay - 22) + 'px';
+            this.ax += (this.mx - this.ax) * 0.15; this.ay += (this.my - this.ay) * 0.15;
+            aura.style.left = (this.ax - 22) + 'px'; aura.style.top = (this.ay - 22) + 'px';
             requestAnimationFrame(tick);
         };
         tick();
@@ -232,7 +266,7 @@ class ProductionCore {
     }
 
     setupMagnetic() {
-        document.querySelectorAll('.nav-item, .contact-link, .stat-card, .cta-button').forEach(el => {
+        document.querySelectorAll('.nav-item, .contact-link, .stat-card, .cta-button, .flow-card').forEach(el => {
             el.onmousemove = e => {
                 const r = el.getBoundingClientRect();
                 const x = (e.clientX - r.left - r.width/2) * 0.25;
@@ -246,4 +280,5 @@ class ProductionCore {
 const core = new ProductionCore();
 </script>
 </body>
-</html>
+    </html>
+    
