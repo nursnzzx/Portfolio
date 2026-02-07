@@ -1,400 +1,255 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Nur1.AEP | Sula.Core</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Nur1.AEP | Sula.Core</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Syncopate:wght@700&display=swap" rel="stylesheet">
 
-<style>
-:root {
-    --accent: #0ea5e9;
-    --bg: linear-gradient(180deg, #ffffff 0%, #f0f9ff 55%, #e0f2fe 100%);
-    --card: rgba(255,255,255,.88);
-    --text: #020617;
-    --radius-xl: 40px;
-    --ease: cubic-bezier(.2,1,.2,1);
-}
+    <style>
+        :root {
+            --bg: #ffffff;
+            --surface: #f0f9ff; 
+            --accent: #0ea5e9;
+            --accent-glow: rgba(14, 165, 233, 0.2);
+            --text: #0f172a;    
+            --text-dim: #64748b;
+            --radius: 24px;
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
-* { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        
+        body { 
+            background: var(--bg); color: var(--text); 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow: hidden;
+        }
 
-html, body {
-    margin: 0;
-    font-family: 'Inter', -apple-system, sans-serif;
-    background: var(--bg);
-    background-attachment: fixed;
-    color: var(--text);
-    overflow-x: hidden;
-    -webkit-tap-highlight-color: transparent;
-}
+        /* ===== ИНТРО ===== */
+        .intro {
+            position: fixed; inset: 0; z-index: 10000;
+            background: var(--accent); display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            clip-path: circle(150% at 50% 50%);
+            transition: clip-path 1.2s cubic-bezier(0.8, 0, 0.2, 1);
+        }
+        .intro.hide { clip-path: circle(0% at 50% 50%); pointer-events: none; }
 
-/* Настройки видео во весь экран */
-video:fullscreen { object-fit: contain; background-color: #000; }
-video:-webkit-full-screen { object-fit: contain; background-color: #000; }
+        .intro h1 {
+            font-family: 'Syncopate'; font-size: clamp(18px, 5vw, 32px);
+            color: #fff; letter-spacing: 4px; display: flex; gap: 10px;
+        }
+        .intro span { display: inline-block; opacity: 0; transform: translateY(20px); animation: reveal 0.7s var(--ease) forwards; }
+        .intro span:nth-child(1) { animation-delay: 0.2s; }
+        .intro span:nth-child(2) { animation-delay: 0.4s; }
+        .intro span:nth-child(3) { animation-delay: 0.6s; }
 
-/* ===== ГОЛУБОЕ ИНТРО ===== */
-.intro {
-    position: fixed;
-    inset: 0;
-    background: var(--accent);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    clip-path: circle(150% at 50% 50%);
-    transition: clip-path 1.2s cubic-bezier(0.8, 0, 0.2, 1);
-    padding: 20px;
-}
+        .loader-bar { width: 220px; height: 3px; background: rgba(255,255,255,0.2); margin-top: 30px; border-radius: 10px; overflow: hidden; }
+        .loader-fill { width: 0%; height: 100%; background: #fff; animation: load 2s ease-in-out forwards; }
 
-.intro.hide {
-    clip-path: circle(0% at 50% 50%);
-}
+        @keyframes reveal { to { opacity: 1; transform: translateY(0); } }
+        @keyframes load { to { width: 100%; } }
 
-.intro-text-wrapper {
-    display: inline-block;
-    position: relative;
-    max-width: 100%;
-}
+        /* ===== НАВИГАЦИЯ ===== */
+        .nav {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            padding: 30px 5%; display: flex; justify-content: space-between; align-items: center;
+        }
+        .nav__logo { font-family: 'Syncopate'; font-size: 0.8rem; font-weight: 700; color: var(--accent); }
+        .nav__menu { 
+            display: flex; gap: 5px; background: rgba(255,255,255,0.85); 
+            backdrop-filter: blur(20px); padding: 5px; border-radius: 100px; 
+            border: 1px solid rgba(14, 165, 233, 0.15);
+        }
+        .nav__link {
+            text-decoration: none; color: var(--text); font-size: 10px; font-weight: 800;
+            padding: 10px 18px; border-radius: 100px; transition: 0.4s; cursor: pointer; opacity: 0.4;
+        }
+        .nav__link.active { opacity: 1; background: var(--accent); color: #fff; }
 
-.intro h1 {
-    font-size: clamp(22px, 6vw, 42px);
-    font-weight: 900;
-    color: #ffffff;
-    margin: 0;
-    letter-spacing: -1px;
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    white-space: nowrap;
-}
+        /* ===== КОНТЕНТ ===== */
+        #stage { position: relative; width: 100%; height: 100vh; }
+        .page {
+            position: absolute; inset: 0; padding: 140px 8% 120px;
+            opacity: 0; pointer-events: none; transform: translateY(30px);
+            transition: 0.8s var(--ease); overflow-y: auto; scrollbar-width: none;
+        }
+        .page.active { opacity: 1; pointer-events: all; transform: translateY(0); }
+        .page::-webkit-scrollbar { display: none; }
 
-.intro span {
-    display: inline-block;
-    opacity: 0;
-    transform: translateY(20px);
-    filter: blur(10px);
-    animation: revealLight 0.7s var(--ease) forwards;
-}
+        /* Сетка видео */
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
+        .card {
+            width: 100%; aspect-ratio: 16 / 9; background: var(--surface);
+            border-radius: var(--radius); overflow: hidden; position: relative;
+            border: 1px solid rgba(14, 165, 233, 0.1); transition: 0.6s var(--ease);
+            cursor: pointer;
+        }
+        .card video { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: 1s; }
+        .card:hover { border-color: var(--accent); transform: translateY(-8px); box-shadow: 0 20px 40px var(--accent-glow); }
+        .card:hover video { opacity: 1; transform: scale(1.05); }
 
-.intro span:nth-child(1) { animation-delay: 0.2s; }
-.intro span:nth-child(2) { animation-delay: 0.4s; opacity: 0.7; }
-.intro span:nth-child(3) { animation-delay: 0.6s; }
+        /* Контакты */
+        .social-link {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 25px; background: var(--surface); border-radius: var(--radius);
+            text-decoration: none; color: var(--text); border: 1px solid rgba(14, 165, 233, 0.1);
+            transition: 0.4s var(--ease); margin-bottom: 12px; max-width: 600px;
+        }
+        .social-link:hover { background: #fff; border-color: var(--accent); transform: translateX(10px); }
+        .social-link span:first-child { font-weight: 800; font-size: 1.3rem; }
 
-.loader-bar {
-    width: 0%;
-    height: 4px;
-    background: #ffffff;
-    margin-top: 15px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
-    animation: loadProgress 1.4s ease-in-out forwards;
-    animation-delay: 0.3s;
-}
+        #cursor { position: fixed; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; pointer-events: none; z-index: 10001; transition: transform 0.1s; }
 
-@keyframes revealLight {
-    to { opacity: 1; transform: translateY(0); filter: blur(0); }
-}
-
-@keyframes loadProgress {
-    0% { width: 0%; }
-    100% { width: 100%; }
-}
-
-/* ===== КОНТЕНТ ===== */
-.app {
-    max-width: 520px;
-    margin: auto;
-    padding: env(safe-area-inset-top) 0 120px;
-}
-
-header { padding: 20px 24px 30px; }
-
-.brand-label {
-    font-size: 22px; 
-    font-weight: 900;
-    letter-spacing: -0.5px;
-    color: var(--text);
-}
-
-.brand-label span {
-    color: var(--accent);
-}
-
-.info {
-    margin: 0 20px 40px;
-    padding: 30px;
-    border-radius: var(--radius-xl);
-    background: linear-gradient(135deg,#e0f2fe,#bae6fd);
-    box-shadow: 0 25px 60px rgba(14,165,233,.12);
-    transform: translateY(30px);
-    opacity: 0;
-    transition: 1s var(--ease);
-}
-.info.show { transform: none; opacity: 1; }
-
-.info h1 { font-size: clamp(24px, 7vw, 30px); font-weight: 900; line-height: 1.1; margin: 0 0 15px; }
-.info .lead { font-size: 16px; font-weight: 700; margin-bottom: 18px; line-height: 1.4; }
-.info ul { margin: 0; padding: 0; list-style: none; }
-.info li { margin-bottom: 10px; font-size: 15px; font-weight: 500; display: flex; align-items: flex-start; gap: 10px; }
-
-.section { margin: 40px 24px 20px; font-size: 22px; font-weight: 900; }
-
-.slider {
-    display: flex;
-    gap: 16px;
-    padding: 0 20px 40px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-}
-.slider::-webkit-scrollbar { display: none; }
-
-.card {
-    min-width: 80vw;
-    min-height: 220px;
-    padding: 25px;
-    border-radius: var(--radius-xl);
-    background: var(--card);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    scroll-snap-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    transition: .5s var(--ease);
-    border: 1px solid rgba(0,0,0,0.03);
-}
-.card.active {
-    transform: scale(1.02);
-    box-shadow: 0 30px 70px rgba(14,165,233,.1);
-    border-color: var(--accent);
-}
-
-.metrics {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    border-top: 1px solid rgba(0,0,0,.06);
-    padding-top: 15px;
-    margin-top: 15px;
-}
-.metrics span { font-size: 18px; font-weight: 900; color: var(--accent); }
-.metrics div { font-size: 11px; font-weight: 700; opacity: 0.6; text-transform: uppercase; }
-
-/* ===== ВИДЕО ===== */
-.v-card {
-    min-width: 82vw;
-    aspect-ratio: 9/16;
-    max-height: 65vh;
-    border-radius: var(--radius-xl);
-    overflow: hidden;
-    position: relative;
-    background: #000;
-    scroll-snap-align: center;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
-    cursor: pointer;
-}
-.v-card video { width: 100%; height: 100%; object-fit: cover; }
-
-.v-cover {
-    position: absolute;
-    inset: 0;
-    z-index: 5;
-    background: linear-gradient(225deg, var(--accent), #bae6fd);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    transition: 0.6s var(--ease);
-}
-.v-card.playing .v-cover { opacity: 0; pointer-events: none; transform: scale(1.1); }
-
-.play-btn {
-    width: 65px; height: 65px;
-    background: rgba(255,255,255,0.25);
-    backdrop-filter: blur(10px);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    border: 2px solid #fff;
-    animation: pulse 2s infinite;
-}
-.play-btn::after {
-    content: ''; width: 0; height: 0;
-    border-style: solid;
-    border-width: 10px 0 10px 16px;
-    border-color: transparent transparent transparent #fff;
-    margin-left: 5px;
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,255,255,0.4); }
-    70% { transform: scale(1.08); box-shadow: 0 0 0 12px rgba(255,255,255,0); }
-    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,255,255,0); }
-}
-
-.cta {
-    position: fixed;
-    bottom: 20px;
-    left: 0; right: 0;
-    padding: 0 20px;
-    z-index: 100;
-}
-.cta a {
-    height: 65px;
-    border-radius: 30px;
-    background: linear-gradient(135deg, #0ea5e9, #38bdf8);
-    color: #fff;
-    font-weight: 900;
-    font-size: 15px;
-    text-decoration: none;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 15px 35px rgba(14,165,233,0.35);
-    letter-spacing: 0.5px;
-}
-
-footer { text-align: center; padding: 40px 0; font-size: 11px; font-weight: 700; opacity: .3; letter-spacing: 1px; }
-</style>
+        @media (max-width: 1000px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 700px) { .grid { grid-template-columns: 1fr; } .page { padding-top: 180px; } }
+    </style>
 </head>
-
 <body>
 
+<div id="cursor"></div>
+
 <div class="intro" id="intro-screen">
-    <div class="intro-content">
-        <div class="intro-text-wrapper">
-            <h1>
-                <span>Nur1.AEP</span>
-                <span>|</span>
-                <span>Sula.Core</span>
-            </h1>
-            <div class="loader-bar"></div>
-        </div>
-    </div>
+    <h1><span>Nur1.AEP</span><span>|</span><span>Sula.Core</span></h1>
+    <div class="loader-bar"><div class="loader-fill"></div></div>
 </div>
 
-<div class="app">
-    <header>
-        <div class="brand-label">Nur1.AEP <span>|</span> Sula.Core</div>
-    </header>
+<nav class="nav">
+    <div class="nav__logo">NUR1.AEP | SULA.CORE</div>
+    <div class="nav__menu">
+        <div class="nav__link active" data-target="home">HOME</div>
+        <div class="nav__link" data-target="portfolio">PORTFOLIO</div>
+        <div class="nav__link" data-target="about">ABOUT</div>
+        <div class="nav__link" data-target="contact">CONTACT</div>
+    </div>
+</nav>
 
-    <section class="info" id="info-block">
-        <h1>Видеопродакшн<br>полного цикла 🎥</h1>
-        <p class="lead">Ломаем баннерную слепоту. Создаем видео, которые досматривают.</p>
-        <ul>
-            <li>▫️ От хаоса в голове до готового рендера.</li>
-            <li>▫️ 4 года в индустрии.</li>
-            <li><strong>Не просто снимаем, а упаковываем смыслы.</strong></li>
-        </ul>
+<main id="stage">
+    
+    <section class="page active" id="home">
+        <div style="max-width: 900px;">
+            <p style="color: var(--accent); font-weight: 800; letter-spacing: 4px; margin-bottom: 15px; font-size: 0.8rem;">PRODUCTION BY NUR1.AEP</p>
+            
+            <h1 style="font-size: clamp(2.2rem, 7vw, 4.5rem); font-weight: 900; line-height: 1.1; margin-bottom: 30px;">
+                Видеопродакшн<br>полного цикла 🎥
+            </h1>
+
+            <div style="border-left: 4px solid var(--accent); padding-left: 30px; margin-bottom: 40px;">
+                <p style="font-size: clamp(1.2rem, 3vw, 1.8rem); font-weight: 700; margin-bottom: 25px; line-height: 1.3;">
+                    Ломаем баннерную слепоту.<br>Создаем видео, которые досматривают.
+                </p>
+                
+                <ul style="list-style: none; font-size: 1.1rem; font-weight: 600; color: var(--text-dim); line-height: 2.2;">
+                    <li><span style="color: var(--accent); margin-right: 10px;">▫️</span> От хаоса в голове до готового рендера.</li>
+                    <li><span style="color: var(--accent); margin-right: 10px;">▫️</span> 4 года в индустрии.</li>
+                </ul>
+
+                <p style="margin-top: 30px; font-size: 1.3rem; font-weight: 800; color: var(--text);">
+                    Не просто снимаем, а <span style="background: var(--surface); padding: 0 10px; border-radius: 8px; border-bottom: 2px solid var(--accent);">упаковываем смыслы.</span>
+                </p>
+            </div>
+        </div>
     </section>
 
-    <h2 class="section">Наши достижения</h2>
-    <div class="slider" id="stats">
-        <div class="card active">
-            <h3 style="margin-bottom:5px;">Результаты охватов</h3>
-            <div class="metrics">
-                <div><span>+340%</span><br>Profit</div>
-                <div><span>1.2M</span><br>Reach</div>
-            </div>
+    <section class="page" id="portfolio">
+        <h2 style="font-family: 'Syncopate'; margin-bottom: 30px; font-size: 0.8rem; color: var(--accent);">SELECTED WORKS</h2>
+        <div class="grid">
+            <div class="card"><video src="Vid1_compressed.mp4" loop muted playsinline></video></div>
+            <div class="card"><video src="Vid2.mp4" loop muted playsinline></video></div>
+            <div class="card"><video src="Vid3.mp4" loop muted playsinline></video></div>
+            <div class="card"><video src="Vid1_compressed.mp4" loop muted playsinline></video></div>
+            <div class="card"><video src="Vid2.mp4" loop muted playsinline></video></div>
+            <div class="card"><video src="Vid3.mp4" loop muted playsinline></video></div>
         </div>
-        <div class="card">
-            <h3 style="margin-bottom:5px;">Премиум качество</h3>
-            <div class="metrics">
-                <div><span>Ultra HD</span><br>Level</div>
-                <div><span>100%</span><br>Quality</div>
-            </div>
-        </div>
-        <div class="card">
-            <h3 style="margin-bottom:5px;">Скорость работы</h3>
-            <div class="metrics">
-                <div><span>24/7</span><br>Support</div>
-                <div><span>FAST</span><br>Render</div>
-            </div>
-        </div>
-    </div>
+    </section>
 
-    <h2 class="section">Портфолио</h2>
-    <div class="slider">
-        <div class="v-card" onclick="playVideo(this)">
-            <div class="v-cover">
-                <div class="play-btn"></div>
-                <span style="color:#fff; font-weight:800; margin-top:15px; font-size:11px; letter-spacing:1px;">1 Видео</span>
-            </div>
-            <video src="Vid3.mp4" playsinline loop controls></video>
+    <section class="page" id="about">
+        <div style="max-width: 800px;">
+            <h2 style="font-family: 'Syncopate'; font-size: 2.5rem; margin-bottom: 30px;">STRATEGY</h2>
+            <p style="font-size: clamp(1.2rem, 3vw, 1.8rem); line-height: 1.5; font-weight: 600;">
+                В СММ картинка без смысла — это мусор. Я создаю контент, который цепляет внимание в первые <span style="color: var(--accent);">2 секунды</span> и удерживает его до конца.
+            </p>
+            <p style="margin-top: 20px; color: var(--text-dim); font-size: 1.1rem; line-height: 1.8;">
+                Мой подход: глубокая аналитика трендов + техническое совершенство. Каждый кадр работает на результат, будь то охваты или прямые продажи.
+            </p>
         </div>
-        <div class="v-card" onclick="playVideo(this)">
-            <div class="v-cover" style="background: linear-gradient(225deg, #38bdf8, #0ea5e9);">
-                <div class="play-btn"></div>
-                <span style="color:#fff; font-weight:800; margin-top:15px; font-size:11px; letter-spacing:1px;">2 Видео</span>
-            </div>
-            <video src="Vid2.mp4" playsinline loop controls></video>
-        </div>
-        <div class="v-card" onclick="playVideo(this)">
-            <div class="v-cover" style="background: linear-gradient(225deg, #020617, #0ea5e9);">
-                <div class="play-btn"></div>
-                <span style="color:#fff; font-weight:800; margin-top:15px; font-size:11px; letter-spacing:1px;">3 Видео</span>
-            </div>
-            <video src="" playsinline loop controls></video>
-        </div>
-    </div>
+    </section>
 
-    <footer>© 2026 NUR1.AEP | SULA.CORE</footer>
-</div>
+    <section class="page" id="contact">
+        <div class="contact-list">
+            <h2 style="font-family: 'Syncopate'; margin-bottom: 30px; font-size: 1.5rem;">Let's Work</h2>
+            <a href="https://t.me/nursnzz" class="social-link" target="_blank"><span>TELEGRAM</span><span>@NURSNZZ ↗</span></a>
+            <a href="https://instagram.com/nur1.aep" class="social-link" target="_blank"><span>INSTAGRAM</span><span>FOLLOW ↗</span></a>
+        </div>
+    </section>
 
-<div class="cta">
-    <a href="https://t.me/nursnzz">ОБСУДИТЬ ПРОЕКТ</a>
-</div>
+</main>
 
 <script>
-window.addEventListener('load', () => {
-    const intro = document.getElementById('intro-screen');
-    setTimeout(() => {
-        intro.classList.add('hide'); 
-        setTimeout(() => {
-            document.getElementById('info-block').classList.add('show');
-        }, 600);
-    }, 2400);
-});
+    class SmmEngine {
+        constructor() {
+            this.pages = document.querySelectorAll('.page');
+            this.links = document.querySelectorAll('.nav__link');
+            this.cursor = document.getElementById('cursor');
+            this.loader = document.getElementById('intro-screen');
+            this.init();
+        }
 
-const statsSlider = document.getElementById('stats');
-statsSlider.addEventListener('scroll', () => {
-    const center = statsSlider.scrollLeft + statsSlider.offsetWidth / 2;
-    [...statsSlider.children].forEach(c => {
-        const cc = c.offsetLeft + c.offsetWidth / 2;
-        c.classList.toggle('active', Math.abs(center - cc) < 100);
-    });
-});
+        init() {
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    this.loader.classList.add('hide');
+                }, 2200);
+            });
 
-function playVideo(card) {
-    const video = card.querySelector('video');
-    
-    // Включаем звук (браузеры могут блокировать автоплей со звуком, если не было клика)
-    video.muted = false;
+            this.setupRouter();
+            this.setupCursor();
+            this.setupVideoObserver();
+        }
 
-    // Функция для перехода в полноэкранный режим
-    if (video.requestFullscreen) {
-        video.requestFullscreen();
-    } else if (video.webkitRequestFullscreen) {
-        video.webkitRequestFullscreen();
-    } else if (video.msRequestFullscreen) {
-        video.msRequestFullscreen();
+        setupRouter() {
+            this.links.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const target = e.currentTarget.getAttribute('data-target');
+                    this.links.forEach(l => l.classList.remove('active'));
+                    e.currentTarget.classList.add('active');
+                    this.pages.forEach(p => {
+                        p.classList.remove('active');
+                        if(p.id === target) p.classList.add('active');
+                    });
+                });
+            });
+        }
+
+        setupCursor() {
+            window.addEventListener('mousemove', (e) => {
+                this.cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+            });
+            document.querySelectorAll('a, .nav__link, .card').forEach(el => {
+                el.addEventListener('mouseenter', () => this.cursor.style.transform += ' scale(6)');
+                el.addEventListener('mouseleave', () => this.cursor.style.transform = this.cursor.style.transform.replace(' scale(6)', ''));
+            });
+        }
+
+        setupVideoObserver() {
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const v = entry.target.querySelector('video');
+                    if (v) {
+                        if (entry.isIntersecting) v.play().catch(() => {});
+                        else v.pause();
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.card').forEach(c => obs.observe(c));
+        }
     }
 
-    video.play();
-    card.classList.add('playing');
-
-    // Когда пользователь выходит из полноэкранного режима, ставим на паузу
-    const exitHandler = () => {
-        if (!document.fullscreenElement && !document.webkitIsFullScreen) {
-            video.pause();
-            card.classList.remove('playing');
-        }
-    };
-
-    document.addEventListener('fullscreenchange', exitHandler);
-    document.addEventListener('webkitfullscreenchange', exitHandler);
-}
+    new SmmEngine();
 </script>
-
 </body>
-    </html>
-    
+                </html>
+                
