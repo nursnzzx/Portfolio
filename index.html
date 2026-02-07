@@ -27,68 +27,59 @@
             background: var(--bg); color: var(--text); 
             font-family: 'Plus Jakarta Sans', sans-serif;
             overflow-x: hidden;
-            background-image: radial-gradient(circle at 0% 0%, rgba(14, 165, 233, 0.05) 0%, transparent 40%),
-                              radial-gradient(circle at 100% 100%, rgba(14, 165, 233, 0.05) 0%, transparent 40%);
+            background-image: radial-gradient(circle at 0% 0%, rgba(14, 165, 233, 0.05) 0%, transparent 40%);
         }
-
-        #cursor-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; position: fixed; pointer-events: none; z-index: 10000; display: none; }
-        #cursor-aura { width: 44px; height: 44px; border: 1.5px solid var(--accent); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transition: transform 0.15s ease-out; box-shadow: 0 0 15px var(--accent-glow); display: none; }
-        @media (pointer: fine) { #cursor-dot, #cursor-aura { display: block; } }
 
         header { width: 100%; padding: 60px 0 30px; display: flex; flex-direction: column; align-items: center; }
         .logo-box { font-family: 'Syncopate'; font-size: 14px; letter-spacing: 10px; color: var(--text); margin-bottom: 45px; }
-        .logo-box span { color: var(--accent); text-shadow: 0 0 10px var(--accent-glow); }
+        .logo-box span { color: var(--accent); }
 
         .nav-wrap {
             display: flex; gap: 8px; background: var(--surface); padding: 8px; border-radius: var(--radius-sm);
             backdrop-filter: blur(20px); border: 1px solid rgba(14, 165, 233, 0.15); position: sticky; top: 25px; z-index: 9000;
-            box-shadow: 0 15px 35px rgba(14, 165, 233, 0.1);
         }
-        .nav-item { padding: 14px 30px; border-radius: var(--radius-sm); border: none; background: transparent; color: var(--text-dim); font-weight: 800; font-size: 11px; cursor: pointer; transition: 0.4s var(--ease); text-transform: uppercase; }
-        .nav-item.active { background: var(--accent); color: #fff; box-shadow: 0 8px 20px var(--accent-glow); }
+        .nav-item { padding: 14px 30px; border-radius: var(--radius-sm); border: none; background: transparent; color: var(--text-dim); font-weight: 800; font-size: 11px; cursor: pointer; text-transform: uppercase; }
+        .nav-item.active { background: var(--accent); color: #fff; }
 
         main { width: 100%; max-width: 1300px; margin: 0 auto; padding: 40px 7% 120px; }
         .section { display: none; opacity: 0; transform: translateY(40px); }
         .section.active { display: block; animation: sectionReveal 0.9s var(--ease) forwards; }
         @keyframes sectionReveal { to { opacity: 1; transform: translateY(0); } }
 
+        /* --- Геройская секция --- */
         .hero-title { font-size: clamp(2.2rem, 8vw, 5rem); font-weight: 900; line-height: 1.05; letter-spacing: -3px; margin-bottom: 35px; }
         .hero-title span { color: var(--accent); }
         .hero-description { border-left: 7px solid var(--accent); padding-left: 35px; margin-bottom: 60px; }
-        .hero-description h2 { font-size: 1.6rem; font-weight: 700; margin-bottom: 15px; }
-        .hero-description p { font-size: 1.1rem; color: var(--text-dim); font-weight: 600; line-height: 1.8; }
-
-        .stats-slider { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 40px; scrollbar-width: none; }
-        .stat-card { min-width: 280px; padding: 40px; background: #fff; border-radius: var(--radius-lg); border: 1px solid rgba(14, 165, 233, 0.1); }
-        .stat-card h3 { font-size: 3.2rem; color: var(--accent); font-weight: 900; }
-
+        
+        /* --- СЕТКА ПОРТФОЛИО --- */
         .portfolio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
         .video-card {
             background: #000; border-radius: var(--radius-lg); aspect-ratio: 16/9;
-            overflow: hidden; position: relative; cursor: pointer; transition: 0.6s var(--ease);
+            overflow: hidden; position: relative; cursor: pointer;
+            /* Исправление для отображения видео на мобилках */
+            -webkit-mask-image: -webkit-radial-gradient(white, black);
         }
-        .video-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px var(--accent-glow); }
-        .video-card video { width: 100%; height: 100%; object-fit: cover; }
+        .video-card video { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            display: block; 
+            background: #000;
+        }
 
+        /* --- Плеер --- */
         #video-modal {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 100000;
-            display: none; align-items: center; justify-content: center; backdrop-filter: blur(15px);
+            position: fixed; inset: 0; background: #000; z-index: 100000;
+            display: none; align-items: center; justify-content: center;
         }
-        #video-modal video { width: 95%; max-width: 1100px; border-radius: 20px; }
+        #video-modal video { width: 100%; max-height: 100%; }
         .close-modal { position: absolute; top: 30px; right: 30px; color: #fff; font-size: 45px; cursor: pointer; z-index: 100001; }
 
-        .contact-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .contact-link { padding: 45px; background: var(--surface); border-radius: var(--radius-lg); text-decoration: none; color: var(--text); border: 1px solid rgba(14, 165, 233, 0.1); transition: 0.4s; }
-        .contact-link:hover { transform: translateY(-5px); box-shadow: 0 15px 30px var(--accent-glow); }
-
         @media (max-width: 1024px) { .portfolio-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 768px) { .portfolio-grid, .contact-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { .portfolio-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
-
-    <div id="cursor-dot"></div>
-    <div id="cursor-aura"></div>
 
     <div id="video-modal">
         <span class="close-modal">&times;</span>
@@ -109,53 +100,34 @@
         <section id="home" class="section active">
             <h1 class="hero-title">Видеопродакшн<br><span>полного цикла 🎥</span></h1>
             <div class="hero-description">
-                <h2>Ломаем баннерную слепоту.<br>Создаем видео, которые досматривают.</h2>
-                <p>▫️ От хаоса в голове до готового рендера.<br>▫️ 4 года в индустрии.<br>Не просто снимаем, а упаковываем смыслы.</p>
-            </div>
-            <div class="stats-slider">
-                <div class="stat-card"><h3>+340%</h3><p>Профит клиентов</p></div>
-                <div class="stat-card"><h3>1.2M+</h3><p>Просмотров Reels</p></div>
-                <div class="stat-card"><h3>24/7</h3><p>Креатив</p></div>
+                <h2>Ломаем баннерную слепоту.</h2>
+                <p>▫️ 4 года в индустрии. Упаковываем смыслы.</p>
             </div>
         </section>
 
         <section id="portfolio" class="section">
             <div class="portfolio-grid">
                 <div class="video-card" onclick="openPlayer('Vid1.mp4')">
-                    <video src="Vid1.mp4" loop muted playsinline autoplay></video>
+                    <video loop muted playsinline autoplay preload="auto">
+                        <source src="Vid1.mp4" type="video/mp4">
+                    </video>
                 </div>
                 <div class="video-card" onclick="openPlayer('Vid2.mp4')">
-                    <video src="Vid2.mp4" loop muted playsinline autoplay></video>
+                    <video loop muted playsinline autoplay preload="auto">
+                        <source src="Vid2.mp4" type="video/mp4">
+                    </video>
                 </div>
                 <div class="video-card" onclick="openPlayer('Vid3.mp4')">
-                    <video src="Vid3.mp4" loop muted playsinline autoplay></video>
+                    <video loop muted playsinline autoplay preload="auto">
+                        <source src="Vid3.mp4" type="video/mp4">
+                    </video>
                 </div>
-                <div class="video-card" onclick="openPlayer('Vid1.mp4')">
-                    <video src="Vid1.mp4" loop muted playsinline autoplay></video>
-                </div>
-                <div class="video-card" onclick="openPlayer('Vid2.mp4')">
-                    <video src="Vid2.mp4" loop muted playsinline autoplay></video>
-                </div>
-                <div class="video-card" onclick="openPlayer('Vid3.mp4')">
-                    <video src="Vid3.mp4" loop muted playsinline autoplay></video>
-                </div>
-            </div>
-        </section>
-
-        <section id="about" class="section">
-            <div style="border-left: 8px solid var(--accent); padding-left: 35px;">
-                <h2 style="font-size: 2.2rem; font-weight: 800;">About</h2>
-                <p style="margin-top: 20px; color: var(--text-dim);">Раздел в разработке...</p>
             </div>
         </section>
 
         <section id="contact" class="section">
-            <div class="contact-grid">
-                <a href="https://t.me/nursnzz" class="contact-link"><span>TELEGRAM</span><h4>@nursnzz ↗</h4></a>
-                <a href="https://instagram.com/nur1.aep" class="contact-link"><span>INSTAGRAM</span><h4>@nur1.aep ↗</h4></a>
-                <a href="https://github.com/nur1aep" class="contact-link"><span>GITHUB</span><h4>Source Code ↗</h4></a>
-                <a href="mailto:nur1aep@gmail.com" class="contact-link"><span>GMAIL</span><h4>Email Me ↗</h4></a>
-            </div>
+             <h2 style="margin-bottom:20px">Контакты</h2>
+             <p>Telegram: @nursnzz</p>
         </section>
     </main>
 
@@ -171,7 +143,6 @@ btns.forEach(btn => {
             s.classList.remove('active');
             if (s.id === btn.dataset.page) s.classList.add('active');
         });
-        window.scrollTo(0, 0);
     }
 });
 
@@ -180,16 +151,15 @@ const player = document.getElementById('modal-player');
 const closeBtn = document.querySelector('.close-modal');
 
 function openPlayer(src) {
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     player.src = src;
-    player.muted = false;
-
+    player.load(); // Принудительная перезагрузка для подхвата видеопотока
+    
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    
     if (isMobile) {
-        if (player.requestFullscreen) {
-            player.requestFullscreen();
-        } else if (player.webkitEnterFullscreen) {
-            player.webkitEnterFullscreen();
-        }
+        modal.style.display = 'flex'; // Показываем фон
+        if (player.requestFullscreen) player.requestFullscreen();
+        else if (player.webkitEnterFullscreen) player.webkitEnterFullscreen();
         player.play();
     } else {
         modal.style.display = 'flex';
@@ -202,14 +172,6 @@ closeBtn.onclick = () => {
     player.pause();
     player.src = "";
 };
-
-modal.onclick = (e) => { if(e.target === modal) closeBtn.onclick(); };
-
-let dot = document.getElementById('cursor-dot'), aura = document.getElementById('cursor-aura');
-let mx = 0, my = 0, ax = 0, ay = 0;
-window.onmousemove = e => { mx = e.clientX; my = e.clientY; dot.style.left = mx+'px'; dot.style.top = my+'px'; };
-function tick() { ax += (mx-ax)*0.1; ay += (my-ay)*0.1; aura.style.left = (ax-22)+'px'; aura.style.top = (ay-22)+'px'; requestAnimationFrame(tick); }
-tick();
 </script>
 </body>
 </html>
