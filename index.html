@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Nur1.AEP | Sula.Core Production</title>
+    <title>Nur1.AEP | Creative Production</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Syncopate:wght@700&display=swap" rel="stylesheet">
@@ -34,7 +34,6 @@
         /* --- UI Elements --- */
         #cursor-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; position: fixed; pointer-events: none; z-index: 10000; display: none; }
         #cursor-aura { width: 44px; height: 44px; border: 1.5px solid var(--accent); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transition: transform 0.15s ease-out; box-shadow: 0 0 15px var(--accent-glow); display: none; }
-
         @media (pointer: fine) { #cursor-dot, #cursor-aura { display: block; } }
 
         header { width: 100%; padding: 60px 0 30px; display: flex; flex-direction: column; align-items: center; }
@@ -65,7 +64,7 @@
         .stat-card { min-width: 280px; padding: 40px; background: #fff; border-radius: var(--radius-lg); border: 1px solid rgba(14, 165, 233, 0.1); }
         .stat-card h3 { font-size: 3.2rem; color: var(--accent); font-weight: 900; }
 
-        /* --- Portfolio (HTML Video Grid) --- */
+        /* --- Portfolio --- */
         .portfolio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
         .video-card {
             background: #000; border-radius: var(--radius-lg); aspect-ratio: 16/9;
@@ -73,15 +72,14 @@
         }
         .video-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px var(--accent-glow); }
         .video-card video { width: 100%; height: 100%; object-fit: cover; }
-        .card-label { position: absolute; bottom: 20px; left: 20px; font-family: 'Syncopate'; font-size: 9px; color: #fff; letter-spacing: 2px; z-index: 5; }
 
-        /* --- Video Modal --- */
+        /* --- Custom Modal (For PC) --- */
         #video-modal {
             position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 100000;
             display: none; align-items: center; justify-content: center; backdrop-filter: blur(15px);
         }
         #video-modal video { width: 95%; max-width: 1100px; border-radius: 20px; }
-        .close-modal { position: absolute; top: 30px; right: 30px; color: #fff; font-size: 45px; cursor: pointer; }
+        .close-modal { position: absolute; top: 30px; right: 30px; color: #fff; font-size: 45px; cursor: pointer; z-index: 100001; }
 
         /* --- Contacts --- */
         .contact-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
@@ -129,35 +127,30 @@
         <section id="portfolio" class="section">
             <div class="portfolio-grid">
                 <div class="video-card" onclick="openPlayer('vid1.mp4')">
-                    <video src="Vid1.mp4" loop muted playsinline autoplay></video>
-                    <div class="card-label">// PROJECT 01</div>
+                    <video src="vid1.mp4" loop muted playsinline autoplay></video>
                 </div>
                 <div class="video-card" onclick="openPlayer('vid2.mp4')">
-                    <video src="Vid2.mp4" loop muted playsinline autoplay></video>
-                    <div class="card-label">// PROJECT 02</div>
+                    <video src="vid2.mp4" loop muted playsinline autoplay></video>
                 </div>
                 <div class="video-card" onclick="openPlayer('vid3.mp4')">
-                    <video src="Vid3.mp4" loop muted playsinline autoplay></video>
-                    <div class="card-label">// PROJECT 03</div>
+                    <video src="vid3.mp4" loop muted playsinline autoplay></video>
                 </div>
                 <div class="video-card" onclick="openPlayer('vid1.mp4')">
-                    <video src="Vid1.mp4" loop muted playsinline autoplay></video>
-                    <div class="card-label">// PROJECT 04</div>
+                    <video src="vid1.mp4" loop muted playsinline autoplay></video>
                 </div>
                 <div class="video-card" onclick="openPlayer('vid2.mp4')">
-                    <video src="Vid2.mp4" loop muted playsinline autoplay></video>
-                    <div class="card-label">// PROJECT 05</div>
+                    <video src="vid2.mp4" loop muted playsinline autoplay></video>
                 </div>
                 <div class="video-card" onclick="openPlayer('vid3.mp4')">
-                    <video src="Vid3.mp4" loop muted playsinline autoplay></video>
-                    <div class="card-label">// PROJECT 06</div>
+                    <video src="vid3.mp4" loop muted playsinline autoplay></video>
                 </div>
             </div>
         </section>
 
         <section id="about" class="section">
             <div style="border-left: 8px solid var(--accent); padding-left: 35px;">
-                <h2 style="font-size: 2.2rem; font-weight: 800;">Я соединяю эстетику кино с алгоритмами соцсетей.</h2>
+                <h2 style="font-size: 2.2rem; font-weight: 800;">About</h2>
+                <p style="margin-top: 20px; color: var(--text-dim);">Раздел в разработке...</p>
             </div>
         </section>
 
@@ -172,7 +165,7 @@
     </main>
 
 <script>
-// Навигация
+// Переключение разделов
 const btns = document.querySelectorAll('.nav-item');
 const sections = document.querySelectorAll('.section');
 
@@ -188,24 +181,40 @@ btns.forEach(btn => {
     }
 });
 
-// Плеер
+// Продвинутый плеер
 const modal = document.getElementById('video-modal');
 const player = document.getElementById('modal-player');
-const close = document.querySelector('.close-modal');
+const closeBtn = document.querySelector('.close-modal');
 
 function openPlayer(src) {
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    
     player.src = src;
-    modal.style.display = 'flex';
-    player.play();
+    player.muted = false; // Включаем звук для полного режима
+
+    if (isMobile) {
+        // На мобилках используем встроенный полноэкранный режим
+        if (player.requestFullscreen) {
+            player.requestFullscreen();
+        } else if (player.webkitEnterFullscreen) {
+            player.webkitEnterFullscreen();
+        }
+        player.play();
+    } else {
+        // На ПК используем модальное окно
+        modal.style.display = 'flex';
+        player.play();
+    }
 }
 
-close.onclick = () => {
+// Закрытие для ПК
+closeBtn.onclick = () => {
     modal.style.display = 'none';
     player.pause();
     player.src = "";
 };
 
-modal.onclick = (e) => { if(e.target === modal) close.onclick(); };
+modal.onclick = (e) => { if(e.target === modal) closeBtn.onclick(); };
 
 // Курсор
 let dot = document.getElementById('cursor-dot'), aura = document.getElementById('cursor-aura');
@@ -215,5 +224,4 @@ function tick() { ax += (mx-ax)*0.1; ay += (my-ay)*0.1; aura.style.left = (ax-22
 tick();
 </script>
 </body>
-            </html>
-            
+</html>
