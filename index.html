@@ -168,8 +168,8 @@
 
         <section id="portfolio" class="section">
             <div class="portfolio-grid">
-                <div class="video-card" onclick="core.play('Vid1.mp4')">
-                    <video loop muted playsinline autoplay poster="Vid1.jpg"><source src="Vid1.mp4" type="video/mp4"></video>
+                <div class="video-card" onclick="core.play('Vid7.mp4')">
+                    <video loop muted playsinline autoplay poster="Vid7.jpg"><source src="Vid7.mp4" type="video/mp4"></video>
                     <div class="card-label">// COMMERCIAL</div>
                 </div>
                 <div class="video-card" onclick="core.play('Vid5.mp4')">
@@ -213,7 +213,7 @@ class ProductionCore {
 
     init() {
         window.addEventListener('load', () => {
-            // Установлено на 1500 мс (1.5 секунды)
+            
             setTimeout(() => { this.intro.classList.add('hide'); }, 1500);
         });
         this.setupNavigation();
