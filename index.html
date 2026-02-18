@@ -21,12 +21,12 @@
             --ease: cubic-bezier(.2,1,.2,1);
         }
 
-        /* ===== ИНТРО ===== */
+        /* ===== ИНТРО (Ускорили анимацию под 1.5с) ===== */
         .intro {
             position: fixed; inset: 0; background: var(--accent);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             z-index: 1000000; clip-path: circle(150% at 50% 50%);
-            transition: clip-path 1.2s cubic-bezier(0.8, 0, 0.2, 1); padding: 20px;
+            transition: clip-path 0.8s cubic-bezier(0.8, 0, 0.2, 1); padding: 20px;
         }
         .intro.hide { clip-path: circle(0% at 50% 50%); }
         .intro h1 {
@@ -36,14 +36,14 @@
         }
         .intro span {
             display: inline-block; opacity: 0; transform: translateY(20px);
-            filter: blur(10px); animation: revealLight 0.7s var(--ease) forwards;
+            filter: blur(10px); animation: revealLight 0.5s var(--ease) forwards;
         }
         .intro span:nth-child(1) { animation-delay: 0.2s; }
-        .intro span:nth-child(2) { animation-delay: 0.4s; opacity: 0.7; }
-        .intro span:nth-child(3) { animation-delay: 0.6s; }
+        .intro span:nth-child(2) { animation-delay: 0.3s; opacity: 0.7; }
+        .intro span:nth-child(3) { animation-delay: 0.4s; }
         .loader-bar {
             width: 0%; height: 4px; background: #fff; margin-top: 15px; border-radius: 10px;
-            animation: loadProgress 1.4s ease-in-out forwards; animation-delay: 0.3s;
+            animation: loadProgress 1.0s ease-in-out forwards; animation-delay: 0.2s;
         }
         @keyframes revealLight { to { opacity: 1; transform: translateY(0); filter: blur(0); } }
         @keyframes loadProgress { from { width: 0%; } to { width: 100%; } }
@@ -213,7 +213,8 @@ class ProductionCore {
 
     init() {
         window.addEventListener('load', () => {
-            setTimeout(() => { this.intro.classList.add('hide'); }, 2000);
+            // Установлено на 1500 мс (1.5 секунды)
+            setTimeout(() => { this.intro.classList.add('hide'); }, 1500);
         });
         this.setupNavigation();
         if(!this.isMobile) {
@@ -280,5 +281,4 @@ class ProductionCore {
 const core = new ProductionCore();
 </script>
 </body>
-    </html>
-    
+</html>
