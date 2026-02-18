@@ -142,9 +142,18 @@
         #video-overlay video { width: 100%; max-height: 90vh; border-radius: 12px; }
         .close-btn { position: absolute; top: 20px; right: 20px; width: 50px; height: 50px; background: rgba(255,255,255,0.2); border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; z-index: 1000001; }
 
-        /* --- Contact --- */
+        /* --- Contact (ОБНОВЛЕННЫЙ) --- */
         .contact-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .contact-link { padding: 40px 20px; background: #fff; border-radius: var(--radius-lg); text-decoration: none; color: var(--text); border: 1px solid rgba(14,165,233,0.1); transition: 0.4s; text-align: center; }
+        .contact-link { 
+            padding: 50px 20px; background: #fff; border-radius: var(--radius-lg); 
+            text-decoration: none; color: var(--text); border: 1px solid rgba(14,165,233,0.1); 
+            transition: 0.4s var(--ease); display: flex; flex-direction: column; align-items: center; gap: 15px;
+        }
+        .contact-link:hover { border-color: var(--accent); transform: translateY(-8px); box-shadow: 0 15px 30px var(--accent-glow); }
+        .contact-icon { width: 40px; height: 40px; fill: var(--accent); transition: 0.3s var(--ease); }
+        .contact-link:hover .contact-icon { transform: scale(1.15) rotate(-5deg); }
+        .contact-link span { font-family: 'Syncopate'; font-size: 10px; color: var(--text-dim); letter-spacing: 2px; }
+        .contact-link h4 { font-size: 1.3rem; font-weight: 800; }
 
         /* --- Mobile Responsiveness --- */
         @media (max-width: 992px) {
@@ -244,8 +253,16 @@
 
         <section id="contact" class="section">
             <div class="contact-grid">
-                <a href="https://t.me/nursnzz" class="contact-link"><span>TELEGRAM</span><h4>@nursnzz ↗</h4></a>
-                <a href="https://instagram.com/nur1.aep" class="contact-link"><span>INSTAGRAM</span><h4>@nur1.aep ↗</h4></a>
+                <a href="https://t.me/nursnzz" class="contact-link">
+                    <svg class="contact-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+                    <span>TELEGRAM</span>
+                    <h4>@nursnzz ↗</h4>
+                </a>
+                <a href="https://instagram.com/nur1.aep" class="contact-link">
+                    <svg class="contact-icon" viewBox="0 0 24 24"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 01-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 017.8 2m-.2 2A3.6 3.6 0 004 7.6v8.8A3.6 3.6 0 007.6 20h8.8a3.6 3.6 0 003.6-3.6V7.6A3.6 3.6 0 0016.4 4H7.6m4.4 3.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9m0 2a2.5 2.5 0 100 5 2.5 2.5 0 000-5m4.75-1.5a1.25 1.25 0 110 2.5 1.25 1.25 0 010-2.5z"/></svg>
+                    <span>INSTAGRAM</span>
+                    <h4>@nur1.aep ↗</h4>
+                </a>
             </div>
         </section>
     </main>
@@ -330,5 +347,5 @@ class ProductionCore {
 const core = new ProductionCore();
 </script>
 </body>
-        </html>
+    </html>
     
